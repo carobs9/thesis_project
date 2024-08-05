@@ -1,0 +1,15 @@
+*.tar
+*.parquet
+*.pkl
+*.csv
+*__pycache__
+*.gz
+*.shp
+*.shx
+*.prj
+*.dbf
+*.cpg
+*.qpj
+/ZONIFICACION/
+/GEOMETRIA/
+*.gif
