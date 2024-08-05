@@ -10,6 +10,8 @@
 *.dbf
 *.cpg
 *.qpj
-/ZONIFICACION/
-/GEOMETRIA/
+*.tar
 *.gif
+/basicos_municipios_personas_202201/
+/basicos_GAU_viajes_202201/
+/basicos_municipios_viajes_202201/
