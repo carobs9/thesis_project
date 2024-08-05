@@ -1,0 +1,448 @@
+HR  {
+	color : #2b2d73;
+}
+
+BODY  {
+	font-family: Arial, helvetica, sans-serif;
+	background-color : #ffffff;
+}
+
+A:visited {
+    color: #2B2D73;
+}
+A {
+    color: #2B2D73;
+}
+
+TD {
+
+}
+
+TD.diezpt {
+
+	font-size : 10pt;	
+}
+
+FONT  {
+
+}
+
+P  {
+
+	font-size : 10pt;
+}
+
+.catbold  {
+    color: #2b2d73;
+
+	font-weight : bold;
+	font-size : 14pt;
+}
+
+UL  {
+
+	font-size : 10pt;
+}
+
+UL.menu  {
+
+	font-size : 10pt;
+	margin-left : 18px;
+	margin-top : 0px;
+	margin-bottom : 0px;	
+	list-style-image: url(bolaul.gif);
+}
+
+UL.menuespacio  {
+
+	font-size : 10pt;
+	margin-left : 18px;
+	margin-top : 0px;
+	margin-bottom : 0px;
+	list-style-image: url(bolaul.gif);
+}
+
+UL.listabola  {
+
+	font-size : 10pt;
+	margin-left : 30px;
+	margin-top : 5px;
+	margin-bottom : 0px;
+	list-style-image: url(bolaul.gif);
+}
+
+LI.lista {
+
+	font-size : 10pt;
+	margin-left : 2px;
+	padding-left : 0px;
+	padding-top : 40px;	
+}
+
+LI.menu {
+
+	font-size : 10pt;
+	margin-left : 18px;
+	padding-left : 0px;
+	margin-top : 5px;
+}
+
+BR  {
+
+	font-size : 10pt;
+}
+
+BLOCKQUOTE  {
+
+}
+
+OPTION  {
+	font-size : 8pt;
+
+	font-weight : normal;
+}
+
+FORM  {
+	font-size : 8pt;
+
+	font-weight : normal;
+}
+
+SELECT  {
+	font-size : 8pt;
+
+	font-weight : normal;
+	color : #0000FF;
+}
+
+SPAN  {
+	font-size : 10pt;
+
+	font-weight : bold;
+	color : #2b2d73;
+}
+
+SPAN.P  {
+	font-size : 13pt;
+	font-weight : normal;
+
+}
+
+SPAN.1  {
+	font-size : 8pt;
+
+	font-weight : normal;
+	color : #FFFFFF;
+}
+
+SPAN.txtpeq  {
+	font-size : 8pt;
+	font-family : arial,sans-serif;
+	font-weight : normal;
+	color : Black;
+}
+
+OL  {
+
+	font-size : 10pt;
+}
+
+H1,H2,H3  {
+
+}
+
+.fecha {  font-family: Arial, Helvetica, sans-serif; font-size: 9pt; font-style: normal; color: #2b2d73}
+
+.uno {
+	background-color: #e5e7f3;
+
+	font-size : 11pt;
+	color: #2b2d73;
+}
+
+.ocho {
+	background-color: #e5e7f3;
+
+	font-weight : normal;
+	font-size : 8pt;
+	color: #2b2d73;
+}
+
+.ochor {
+
+	font-weight : normal;
+	font-size : 8pt;
+	color: #2b2d73;
+}
+
+.ochoc {
+	background-color: #eef2f8;
+
+	font-weight : bold;
+	font-size : 8pt;
+	color: #2b2d73;
+}
+
+.diez {
+	background-color: #e5e7f3;
+
+	font-weight : bold;
+	font-size : 10pt;
+	color: #2b2d73;
+}
+.diezbl {
+	background-color: #FFFfff;
+
+	font-weight : bold;
+	font-size : 10pt;
+	color: #2b2d73;
+}
+
+.diezbold {
+
+	font-weight : bold;
+	font-size : 10pt;
+	color: #2b2d73;
+}
+
+.diezn {
+	background-color: #e5e7f3;
+
+	font-weight : normal;	
+	font-size : 10pt;
+	color: #2b2d73;
+}
+
+.dieznormal {
+
+	font-weight : normal;	
+	font-size : 10pt;
+}
+
+.diezbox {
+	background-color: #eef2f8;
+
+	font-weight : bold;
+	font-size : 10pt;
+	color: #2b2d73;
+	padding-left : 4px;
+}
+
+once {
+	background-color: #eef2f8;
+
+	font-weight : bold;
+	font-size : 10pt;
+	color: #2b2d73;
+}
+
+.oncefondo {
+	background-color: #FFF8DC;
+
+	font-weight : bold;
+	font-size : 11pt;
+	color: #2b2d73;
+}
+
+.doce {
+    color: #2b2d73;
+
+	font-weight : bold;
+	font-size : 12pt;
+	background-color: #eef2f8;
+	padding-left : 14px;	
+}
+
+.docen {
+    color: #2b2d73;
+
+	font-weight : bold;
+	font-size : 12pt;
+}
+
+.docenf {
+    color: #2b2d73;
+
+	font-weight : bold;
+	font-size : 12pt;
+	background-color: #fff8dc;	
+}
+
+.doceon {
+    color: #2b2d73;
+
+	font-weight : bold;
+	font-size : 12pt;
+	background-color: #e5e7f3;
+	padding-left : 14px;	
+}
+
+.docenorm {
+    color: #2b2d73;
+
+	font-weight : bold;
+	font-size : 12pt;
+	background-color: #e5e7f3;
+	padding : 5px;	
+}
+
+.docenormc {
+    color: #2b2d73;
+
+	font-weight : bold;
+	font-size : 12pt;
+	background-color: #eef2f8;
+	padding : 5px;	
+}
+
+.catorcenorm {
+    color: #2b2d73;
+
+	font-weight : bold;
+	font-size : 14pt;
+	background-color: #e5e7f3;
+	padding : 5px;	
+}
+
+.oct22 {
+    color: #ffffff;
+
+	font-weight : bold;
+	font-size : 12pt;
+}
+.oct22p {
+    color: #ffffff;
+
+	font-weight : bold;
+	font-size : 10pt;
+}
+
+.faltandiasp {
+
+	font-weight : normal;
+	font-size : 8pt;
+}
+
+.numdias {
+    color: #000000;
+
+	font-weight : normal;
+	font-size : 16pt;
+	background-color: #FFFFFF;
+}
+
+.numdiasp {
+    color: #000000;
+
+	font-weight : normal;
+	font-size : 10pt;
+	background-color: #FFFFFF;
+}
+
+H4 {
+	PADDING-RIGHT: 0.3em;
+	PADDING-LEFT: 0.3em;
+	PADDING-BOTTOM: 0.3em;
+	MARGIN: 0px;
+	PADDING-TOP: 0.3em;
+	TEXT-ALIGN: center
+}
+DIV.menu {
+	BORDER-RIGHT: #b6c5df 0px solid;
+	PADDING-RIGHT: 0px;
+	BORDER-TOP: #b6c5df 0px solid;
+	PADDING-LEFT: 0px;
+	BACKGROUND: #e5e7f3;
+	PADDING-BOTTOM: 0px;
+	MARGIN: 0em;
+	BORDER-LEFT: #b6c5df 0px solid;
+	WIDTH: 145px;
+	PADDING-TOP: 0px;
+	BORDER-BOTTOM: #b6c5df 1px solid}
+DIV.menu A {
+	PADDING-RIGHT: 0.2em;
+	BORDER-TOP: #b6c5df 1px solid;
+	DISPLAY: block;
+	PADDING-LEFT: 0.2em;
+	FONT-WEIGHT: bold;
+	PADDING-BOTTOM: 0.2em;
+	MARGIN: 0px;
+	WIDTH: 100%;
+	COLOR: #2b2d73;
+	PADDING-TOP: 0.2em;
+	TEXT-DECORATION: none
+}
+UNKNOWN {
+	WIDTH: auto
+}
+DIV.menu A:hover {
+	BACKGROUND: #eef2f8; 
+	COLOR: #fff8dc;
+}
+
+DIV.menudos {
+	BORDER-RIGHT: #b6c5df 0px solid;
+	PADDING-RIGHT: 0px;
+	BORDER-TOP: #b6c5df 1px solid;
+	PADDING-LEFT: 0px;
+	BACKGROUND: #eef2f8;
+	PADDING-BOTTOM: 0px;
+	MARGIN: 0em;
+	BORDER-LEFT: #fff8dc 10px solid;
+	WIDTH: 145px;
+	PADDING-TOP: 0px;
+	BORDER-BOTTOM: #b6c5df 1px solid}
+DIV.menudos A {
+	PADDING-RIGHT: 0.0em;
+	BORDER-TOP: #b6c5df 1px solid;
+	DISPLAY: block;
+	PADDING-LEFT: 0.2em;
+	FONT-WEIGHT: bold;
+	PADDING-BOTTOM: 0.2em;
+	MARGIN: 0px;
+	WIDTH: 100%;
+	COLOR: #2b2d73;
+	PADDING-TOP: 0.2em;
+	TEXT-DECORATION: none
+}
+
+DIV.menudos A:hover {
+	BACKGROUND: #fff8dc; 
+	COLOR: #2b2d73;
+}
+DIV.menudosbme {
+	BORDER-RIGHT: #b6c5df 0px solid;
+	PADDING-RIGHT: 0px;
+	BORDER-TOP: #b6c5df 1px solid;
+	PADDING-LEFT: 0px;
+	BACKGROUND: #ffffff;
+	PADDING-BOTTOM: 0px;
+	MARGIN: 0em;
+	BORDER-LEFT: #2b2d73 10px solid;
+	WIDTH: 98%;
+	PADDING-TOP: 0px;
+	BORDER-BOTTOM: #b6c5df 1px solid;
+
+	font-size : 12px;
+}
+DIV.menudosbme A {
+	PADDING-RIGHT: 0.0em;
+	BORDER-TOP: #b6c5df 1px solid;
+	DISPLAY: block;
+	PADDING-LEFT: 0.2em;
+	FONT-WEIGHT: normal;
+	PADDING-BOTTOM: 0.2em;
+	MARGIN: 0px;
+	WIDTH: 100%;
+	COLOR: #2b2d73;
+	PADDING-TOP: 0.2em;
+	TEXT-DECORATION: none;
+
+	font-size : 12px;
+}
+
+DIV.menudosbme A:hover {
+	BACKGROUND: #eef2f8; 
+	COLOR: #2b2d73;
+	BORDER-LEFT: #ffffff 0px solid;
+}
