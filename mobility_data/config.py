@@ -1,7 +1,7 @@
 from pathlib import Path
 
 # Set the root path
-ROOT_PATH = Path('C:/Users/rqg886/Desktop/THESIS')
+ROOT_PATH = Path('C:/Users/rqg886/Desktop/THESIS_PROJECT')
 
 # general folders
 METRO_DATA = ROOT_PATH / 'metro_data' 
