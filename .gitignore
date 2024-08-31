@@ -13,3 +13,5 @@
 *.tar
 *.gif
 *csv.gz
+*.qmd
+*.DS_Store
