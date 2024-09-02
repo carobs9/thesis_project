@@ -15,3 +15,5 @@
 *csv.gz
 *.qmd
 *.DS_Store
+*.xls
+*.xlsx
