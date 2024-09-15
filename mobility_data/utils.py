@@ -42,3 +42,16 @@ def filter_district(df, district_code):
     '''
     filtered_data = df[df['origen'].str.startswith(district_code) & df['destino'].str.startswith(district_code)]
     return filtered_data
+
+def open_estudios_completos(data_dir):
+    '''
+    Function to open data from specific days from personas, viajes, or pernoctaciones stored as .gz format.
+    data_dir (str): Directory of the folder containing personas, viajes or pernoctaciones.
+    days (list of int): List of indices indicating the days of the month (i.e. 10 means day 11).
+    Returns:
+        A list of dataframes containing the concatenated data for the specified days.
+    '''
+
+    df = pd.read_csv(data_dir, compression='gzip', sep='|') # Read the compressed CSV file
+    
+    return df

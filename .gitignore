@@ -17,3 +17,5 @@
 *.DS_Store
 *.xls
 *.xlsx
+*.ipynb_checkpoints
+*cache
