@@ -1,4 +1,4 @@
-# thesis
+# Understanding the role of mobility in segregation patterns in the city of Madrid
 Thesis project to understand the role of mobility in segregation patterns in the city of Madrid.
 
 
