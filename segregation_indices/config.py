@@ -3,6 +3,7 @@ from pathlib import Path
 # Set the root path
 # ROOT_PATH = Path('C:/Users/rqg886/Desktop/THESIS_PROJECT')
 ROOT_PATH = Path('/Users/caro/Desktop/thesis_project')
+FOLDER_PATH = 'segregation_indices'
 
 # general folders
 METRO_DATA = ROOT_PATH / 'metro_data' 
@@ -15,6 +16,12 @@ PERSONAS_DATA = MOBILITY_DATA / 'PERSONAS'
 GEOMETRIA_DATA = MOBILITY_DATA / 'GEOMETRIA' 
 ZONIFICACION_DATA = MOBILITY_DATA / 'ZONIFICACION' 
 
-OUTPUTS_PATH = ROOT_PATH / 'outputs'
+OUTPUTS_PATH = ROOT_PATH / FOLDER_PATH / 'outputs'
+FIGURES_PATH = ROOT_PATH / FOLDER_PATH / 'figures'
 
 DATASETS_PATH = ROOT_PATH / 'datasets'
+
+# variables
+INCOME_VARS_OF_INTEREST = ['Media de la renta por unidad de consumo','Mediana de la renta por unidad de consumo',
+                           'Renta bruta media por hogar','Renta bruta media por persona',
+                            'Renta neta media por hogar', 'Renta neta media por persona ']

@@ -1,0 +1,9 @@
+pandas
+geopandas
+seaborn
+matplotlib
+contextily
+mapclassify
+numpy
+libpysal
+esda
