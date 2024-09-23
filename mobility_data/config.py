@@ -1,8 +1,8 @@
 from pathlib import Path
 
 # Set the root path
-# ROOT_PATH = Path('C:/Users/rqg886/Desktop/THESIS_PROJECT')
-ROOT_PATH = Path('/Users/caro/Desktop/thesis_project')
+ROOT_PATH = Path('C:/Users/rqg886/Desktop/THESIS_PROJECT')
+# ROOT_PATH = Path('/Users/caro/Desktop/thesis_project')
 FOLDER_PATH = 'mobility_data'
 
 # general folders

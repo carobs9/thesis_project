@@ -7,3 +7,6 @@ mapclassify
 numpy
 libpysal
 esda
+plotly
+nbformat>=4.2.0
+kaleido
