@@ -1,8 +1,8 @@
 from pathlib import Path
 
 # Set the root path
-ROOT_PATH = Path('C:/Users/rqg886/Desktop/THESIS_PROJECT')
-# ROOT_PATH = Path('/Users/caro/Desktop/thesis_project')
+# ROOT_PATH = Path('C:/Users/rqg886/Desktop/THESIS_PROJECT')
+ROOT_PATH = Path('/Users/caro/Desktop/thesis_project')
 FOLDER_PATH = 'mobility_data'
 
 # general folders
@@ -20,3 +20,11 @@ OUTPUTS_PATH = ROOT_PATH / FOLDER_PATH / 'outputs'
 FIGURES_PATH = ROOT_PATH / FOLDER_PATH / 'figures'
 
 DATASETS_PATH = ROOT_PATH / 'datasets'
+
+# NOTE: These variables need to be set by the user
+# 1. Date of interest
+week = True
+weekend = False
+
+# 2. Save figures
+SAVE_FIGURES = True

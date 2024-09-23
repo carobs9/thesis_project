@@ -1,8 +1,8 @@
 from pathlib import Path
 
 # Set the root path
-ROOT_PATH = Path('C:/Users/rqg886/Desktop/THESIS_PROJECT')
-# ROOT_PATH = Path('/Users/caro/Desktop/thesis_project')
+# ROOT_PATH = Path('C:/Users/rqg886/Desktop/THESIS_PROJECT')
+ROOT_PATH = Path('/Users/caro/Desktop/thesis_project')
 FOLDER_PATH = 'segregation_indices'
 
 # general folders
@@ -22,20 +22,23 @@ FIGURES_PATH = ROOT_PATH / FOLDER_PATH / 'figures'
 
 DATASETS_PATH = ROOT_PATH / 'datasets'
 
-# data of interest
-week = True
+# NOTE: These variables need to be set by the user
+# 1. Date of interest
+week = False
 weekend = False
 
-# dynamic figures folder
+# 2. Dynamic figures folder
 if week:
     FIGURES_PATH = FIGURES_PATH / 'week'
 elif weekend:
     FIGURES_PATH = FIGURES_PATH / 'weekend'
+else:
+    FIGURES_PATH = FIGURES_PATH / 'morans'
 
-# variables
+# 3. Variables of interest
 INCOME_VARS_OF_INTEREST = ['Media de la renta por unidad de consumo','Mediana de la renta por unidad de consumo',
                            'Renta bruta media por hogar','Renta bruta media por persona',
                             'Renta neta media por hogar', 'Renta neta media por persona ']
 
-# save figures
+# 4. Save figures
 SAVE_FIGURES = True
