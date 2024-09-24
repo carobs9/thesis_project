@@ -114,7 +114,10 @@ if cfg.SAVE_FIGURES:
     morans_i_df.to_csv(cfg.OUTPUTS_PATH / 'morans_i_df.csv', index=False)
 
 # PLOT LOCAL MORAN'S I ---------------------------------------------------------------------------------------------
+
 print('Building and plotting Local Morans I...')
+
+# TODO: Add p-values and z-scores to the graphs!
 for var in cfg.INCOME_VARS_OF_INTEREST:
     # Get the corresponding Local Moran's I values from the results DataFrame
     local_moran_values = morans_i_df.loc[morans_i_df['var'] == var, 'local_moran_i_values'].values[0]
@@ -144,9 +147,9 @@ for var in cfg.INCOME_VARS_OF_INTEREST:
 # BUILD MORAN'S PLOT ---------------------------------------------------------------------------------------------
 print('Building and plotting Morans Plot...')
 for var in cfg.INCOME_VARS_OF_INTEREST:
-    gdf[f"mean_{var}_std"] = gdf[var] - gdf[var].mean() # calculate mean for each income var. of interest
-    gdf[f"mean_{var}_lag_std"] = lag_spatial( # calculate lag for each var. of interest
-        w, gdf[f"mean_{var}_std"]
+    gdf["mean_std"] = gdf[var] - gdf[var].mean() # calculate deviation of the mean for each income var. of interest
+    gdf["mean_lag_std"] = lag_spatial( # calculate lag for each var. of interest
+        w, gdf["mean_std"]
     )
 
 labels = gdf['ID'] # set labels = Madrid districts' IDs 
@@ -154,15 +157,15 @@ labels = gdf['ID'] # set labels = Madrid districts' IDs
 for var in cfg.INCOME_VARS_OF_INTEREST:
     f, ax = plt.subplots(1, figsize=(6, 6))
     sns.regplot(
-        x=f"mean_{var}_std",
-        y=f"mean_{var}_lag_std",
+        x="mean_std",
+        y="mean_lag_std",
         ci=None,
         data=gdf,
         line_kws={"color": "r"},
     )
 
     for i, txt in enumerate(labels):
-        ax.annotate(txt, (gdf[f"mean_{var}_std"].iloc[i], gdf[f"mean_{var}_lag_std"].iloc[i]), fontsize=9, ha='right')
+        ax.annotate(txt, (gdf["mean_std"].iloc[i], gdf["mean_lag_std"].iloc[i]), fontsize=9, ha='right')
         
     ax.axvline(0, c="k", alpha=0.5)
     ax.axhline(0, c="k", alpha=0.5)
