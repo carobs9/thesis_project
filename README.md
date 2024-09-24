@@ -1,6 +1,11 @@
 # Understanding the role of mobility in segregation patterns in the city of Madrid
 Thesis project to understand the role of mobility in segregation patterns in the city of Madrid.
 
+## Environment and Running Code
+
+To run a Python script with specific environment (.venv): environment_path + .py path
+
+Example: /Users/caro/Desktop/thesis_project/.venv/bin/python /Users/caro/Desktop/thesis_project/segregation_indices/morans_i.py
 
 ## The data
 
