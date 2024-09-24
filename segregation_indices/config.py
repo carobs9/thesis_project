@@ -24,16 +24,12 @@ DATASETS_PATH = ROOT_PATH / 'datasets'
 
 # NOTE: These variables need to be set by the user
 # 1. Date of interest
-week = False
-weekend = False
+
+type_of_study = 'morans' # 'week', 'weekend', or 'morans'
 
 # 2. Dynamic figures folder
-if week:
-    FIGURES_PATH = FIGURES_PATH / 'week'
-elif weekend:
-    FIGURES_PATH = FIGURES_PATH / 'weekend'
-else:
-    FIGURES_PATH = FIGURES_PATH / 'morans'
+
+FIGURES_PATH = FIGURES_PATH / type_of_study
 
 # 3. Variables of interest
 INCOME_VARS_OF_INTEREST = ['Media de la renta por unidad de consumo','Mediana de la renta por unidad de consumo',

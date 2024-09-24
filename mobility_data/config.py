@@ -23,8 +23,12 @@ DATASETS_PATH = ROOT_PATH / 'datasets'
 
 # NOTE: These variables need to be set by the user
 # 1. Date of interest
-week = True
-weekend = False
+
+type_of_study = 'week' # or 'weekend', or 'morans'
+
+# 2. Dynamic figures folder
+
+FIGURES_PATH = FIGURES_PATH / type_of_study
 
 # 2. Save figures
 SAVE_FIGURES = True

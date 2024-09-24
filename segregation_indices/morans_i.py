@@ -5,7 +5,6 @@ import geopandas as gpd
 import seaborn as sns
 import contextily as ctx
 import matplotlib.pyplot as plt
-import math
 # for Moran's I
 from libpysal.weights import Queen
 from esda.moran import Moran, Moran_Local
@@ -45,14 +44,15 @@ for var in cfg.INCOME_VARS_OF_INTEREST:
     ctx.add_basemap(ax, crs=gdf.crs, source=ctx.providers.OpenStreetMap.Mapnik)
     
     # Set title and remove axis
-    ax.set_title(f'Quantiles of {var}', fontsize=15)
+    ax.set_title(f'Quantiles of {var.lower()}', fontsize=15)
     ax.set_axis_off()
     
     # Save each figure
     if cfg.SAVE_FIGURES:
-        fig.savefig(cfg.FIGURES_PATH / f'{var}_quantiles.png', dpi=300, bbox_inches='tight')
+        fig.savefig(cfg.FIGURES_PATH / f'{var.lower()}_quantiles.png', dpi=300, bbox_inches='tight')
 
 # CALCULATE WEIGHTS ---------------------------------------------------------------------------------------------
+
 print('Calculating spatial weights...')
 # Create spatial weights based on adjacency (Queen Contiguity)
 w = Queen.from_dataframe(gdf) # TODO: Check details on how to do this properly
@@ -64,8 +64,8 @@ plt.xlabel('Cardinality')
 plt.ylabel('Frequency')
 plt.title('Histogram of Cardinalities')
 
-if cfg.SAVE_FIGURES:
-    plt.savefig(cfg.FIGURES_PATH / 'queen_cardinalities_histogram.png', dpi=300, bbox_inches='tight')
+# if cfg.SAVE_FIGURES: # FIXME: This was not being saved correctly
+    # plt.savefig(cfg.FIGURES_PATH / 'queen_cardinalities_histogram.png', dpi=300, bbox_inches='tight')
 
 # visual weights figure
 f, ax = plt.subplots(1, figsize=(8, 8))
@@ -113,7 +113,7 @@ morans_i_df = pd.DataFrame(results_list) # for each moran statistic of interest,
 if cfg.SAVE_FIGURES:
     morans_i_df.to_csv(cfg.OUTPUTS_PATH / 'morans_i_df.csv', index=False)
 
-# PLOT LOCAL MORAN'S I ---------------------------------------------------------------------------------------------
+# PLOT LOCAL MORAN'S I. TODO: REVIEW THE CODE, IT IS CONFUSING ---------------------------------------------------------------------------------------------
 
 print('Building and plotting Local Morans I...')
 
@@ -122,34 +122,57 @@ for var in cfg.INCOME_VARS_OF_INTEREST:
     # Get the corresponding Local Moran's I values from the results DataFrame
     local_moran_values = morans_i_df.loc[morans_i_df['var'] == var, 'local_moran_i_values'].values[0]
     
+    # Retrieve global statistics for the current variable
+    global_p_value = morans_i_df.loc[morans_i_df['var'] == var, 'global_p_value'].values[0]
+    global_z_score = morans_i_df.loc[morans_i_df['var'] == var, 'global_z_score'].values[0]
+    global_moran_i = morans_i_df.loc[morans_i_df['var'] == var, 'global_moran_i'].values[0]
+    
     # Add the Local Moran's I values to the GeoDataFrame
     gdf[f'lisa_{var.replace(" ", "_").lower()}'] = local_moran_values
     
     # Plot the LISA values for the current variable
-    fig, ax = plt.subplots(1, figsize=(5, 5))
+    fig, ax = plt.subplots(1, figsize=(6, 6))
     gdf.plot(
         column=f'lisa_{var.replace(" ", "_").lower()}',  # Column containing the LISA values
         cmap='coolwarm',        # Use the coolwarm colormap
         legend=True,            # Show legend
         ax=ax                   # Axis to plot on
     )
-
-    ax.set_title(f"Local Moran's I: {var}", fontsize=15)
-    ax.set_axis_off()  # Turn off axis labels
+    
+    # Set the title with global statistics
+    ax.set_title(
+        f"Local Moran's I: {var}\n"
+        f"Global Moran's I: {global_moran_i:.4f}, "
+        f"p-value: {global_p_value:.4f}, "
+        f"z-score: {global_z_score:.4f}",
+        fontsize=12
+    )
+    
+    # Optional: Add the global statistics as text on the plot
+    textstr = (f"Global Moran's I: {global_moran_i:.4f}\n"
+               f"p-value: {global_p_value:.4f}\n"
+               f"z-score: {global_z_score:.4f}")
+    props = dict(boxstyle='round', facecolor='white', alpha=0.5)
+    ax.text(0.05, 0.95, textstr, transform=ax.transAxes, fontsize=10,
+            verticalalignment='top', bbox=props)
+    
+    # Remove axis labels
+    ax.set_axis_off()
     
     # Save and show the plot
     if cfg.SAVE_FIGURES:
-        plt.savefig(cfg.FIGURES_PATH / f'moran_lisa_{var.replace(" ", "_").lower()}.png', dpi=300, bbox_inches='tight')
+        plt.savefig(cfg.FIGURES_PATH / f'local_moran_map_{var.replace(" ", "_").lower()}.png', dpi=300, bbox_inches='tight')
     
-    # Remove the LISA column to avoid conflicts 
+    # Remove the LISA column to avoid conflicts in the next iteration
     gdf.drop(columns=[f'lisa_{var.replace(" ", "_").lower()}'], inplace=True)
 
 # BUILD MORAN'S PLOT ---------------------------------------------------------------------------------------------
+
 print('Building and plotting Morans Plot...')
 for var in cfg.INCOME_VARS_OF_INTEREST:
-    gdf["mean_std"] = gdf[var] - gdf[var].mean() # calculate deviation of the mean for each income var. of interest
-    gdf["mean_lag_std"] = lag_spatial( # calculate lag for each var. of interest
-        w, gdf["mean_std"]
+    gdf[f"mean_{var}_std"] = gdf[var] - gdf[var].mean() # calculate mean for each income var. of interest
+    gdf[f"mean_{var}_lag_std"] = lag_spatial( # calculate lag for each var. of interest
+        w, gdf[f"mean_{var}_std"]
     )
 
 labels = gdf['ID'] # set labels = Madrid districts' IDs 
@@ -157,21 +180,21 @@ labels = gdf['ID'] # set labels = Madrid districts' IDs
 for var in cfg.INCOME_VARS_OF_INTEREST:
     f, ax = plt.subplots(1, figsize=(6, 6))
     sns.regplot(
-        x="mean_std",
-        y="mean_lag_std",
+        x=f"mean_{var}_std",
+        y=f"mean_{var}_lag_std",
         ci=None,
         data=gdf,
         line_kws={"color": "r"},
     )
 
     for i, txt in enumerate(labels):
-        ax.annotate(txt, (gdf["mean_std"].iloc[i], gdf["mean_lag_std"].iloc[i]), fontsize=9, ha='right')
+        ax.annotate(txt, (gdf[f"mean_{var}_std"].iloc[i], gdf[f"mean_{var}_lag_std"].iloc[i]), fontsize=9, ha='right')
         
     ax.axvline(0, c="k", alpha=0.5)
     ax.axhline(0, c="k", alpha=0.5)
     ax.set_title(f"Moran Plot - {var}")
 
     if cfg.SAVE_FIGURES:
-        plt.savefig(cfg.FIGURES_PATH / f'moran_lisa_{var.replace(" ", "_").lower()}.png', dpi=300, bbox_inches='tight')
+        plt.savefig(cfg.FIGURES_PATH / f'moran_plot_{var.replace(" ", "_").lower()}.png', dpi=300, bbox_inches='tight')
 
 print('Done!')

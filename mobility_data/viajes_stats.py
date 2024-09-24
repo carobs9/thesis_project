@@ -4,10 +4,10 @@ import pandas as pd
 import config as cfg
 
 print('Starting')
-if cfg.week:
+if cfg.type_of_study == 'week':
     all_viajes = pd.read_csv(cfg.VIAJES_DATA / 'all_viajes_week_0222.csv') # substracting trips in Madrid districts during day 7 to 11 of Feb 
     data_name = 'Normal Week'
-elif cfg.weekend:
+elif cfg.type_of_study == 'weekend':
     all_viajes = pd.read_csv('VIAJES/all_viajes_weekend_0222.csv') # substracting trips in Madrid districts during day 5 to 6 of Feb. NOTE: This dataframe has not been created yet
     data_name = 'Normal Weekend'
 else:
