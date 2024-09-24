@@ -9,9 +9,9 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from utils import get_overview, open_gz, open_gz_by_district, filter_district
 
-if cfg.week:
+if cfg.type_of_study == 'week':
     viajes = open_gz_by_district(cfg.VIAJES_DATA / 'basicos_distritos_viajes_202202', [6,7,8,9,10], district_code='28079') # substracting trips in Madrid districts during day 7 to 11 of Feb 
-elif cfg.weekend:
+elif cfg.type_of_study == 'weekend':
     viajes = open_gz_by_district(cfg.VIAJES_DATA / 'basicos_distritos_viajes_202202', [4,5], district_code='28079') # substracting trips in Madrid districts during day 5 to 6 of Feb 
 else:
     print('No time of study has been set')
