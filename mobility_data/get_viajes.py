@@ -7,7 +7,7 @@ import tarfile
 import config as cfg
 import matplotlib.pyplot as plt
 import pandas as pd
-from utils import get_overview, open_gz, open_gz_by_district, filter_district
+from utils import open_gz_by_district
 
 if cfg.type_of_study == 'week':
     viajes = open_gz_by_district(cfg.VIAJES_DATA / 'basicos_distritos_viajes_202202', [6,7,8,9,10], district_code='28079') # substracting trips in Madrid districts during day 7 to 11 of Feb 

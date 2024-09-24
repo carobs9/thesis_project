@@ -10,6 +10,16 @@ from libpysal.weights import Queen
 from esda.moran import Moran, Moran_Local
 from libpysal.weights import lag_spatial
 
+'''
+I am calculating Moran's I for mean household rent data (and possibly more types of data, 
+like walknig time to amenities or something like that) 
+to see if the distribution of rent in the districts of Madrid is dispersed randomly or if there is any clustering.
+
+To calculate Moran's I, I use the PYSAL library to first calculate the weights 
+(in this case, Queen, but I need to justify why and do some more research on this).
+Then, I apply the Moran's I equation by using a built-in method: mi_income = Moran(merged['Total'], w)
+'''
+
 print(f'In this script, I plot income quantiles and calculate different Morans I statistics in the city of Madrid for income data from 2021.')
 print(f'The variables for which income quantiles and Morans I statistics are calculared are: {cfg.INCOME_VARS_OF_INTEREST}')
 print()

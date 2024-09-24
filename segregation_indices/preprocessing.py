@@ -1,12 +1,6 @@
 import config as cfg
 import pandas as pd 
 import geopandas as gpd
-# for plotting
-import seaborn as sns
-import matplotlib.pyplot as plt
-import contextily as ctx
-import matplotlib.pyplot as plt
-import mapclassify
 
 nombres_distritos = pd.read_csv(cfg.ZONIFICACION_DATA / 'distritos/PROCESSED_nombres_distritos.csv')
 gdf = gpd.read_file(cfg.ZONIFICACION_DATA / 'distritos/madrid_gdf.geojson')

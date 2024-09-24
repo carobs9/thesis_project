@@ -43,6 +43,7 @@ print('Shape of the mobility dataset: ', week.shape)
 
 # MERGE INCOME AND MOBILITY DATA ----------------------------------------------------------------------
 
+# 1. Adding income data per district to the mobility data, to later calculate deciles and build assortativity matrix
 viajes_with_income = pd.merge(
     week,
     rent_data,
@@ -55,6 +56,7 @@ print('Variable to calculate matrices on is set to: ', var_of_interest)
 
 # CALCULATE INCOME DECILES ----------------------------------------------------------------------
 
+# 2. Divide data into income deciles D for each SE class - for each origin and destination, I add the income decile 
 print(f'Calculating {n_income_deciles} income deciles for the {var_of_interest} data.')
 rent_data['income_decile'] = pd.qcut(rent_data[var_of_interest], n_income_deciles, labels=False)
 
@@ -72,7 +74,7 @@ viajes_with_income.drop(columns=['residencia', 'estudio_origen_posible', 'estudi
 bin_counts = viajes_with_income['income_decile'].value_counts().sort_index()
 bin_counts.plot(kind='bar')
 
-# 1. matplotlib
+# 1. matplotlib. FIXME: IS this plot correct? I have to make sure it makes sense.
 plt.xlabel('Income Bin')
 plt.ylabel('Number of Entries')
 plt.title(f'Distribution of Deciles for Destination of Trips\n{time_of_study}\nVariable: {var_of_interest}')
