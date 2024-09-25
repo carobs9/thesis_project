@@ -5,6 +5,20 @@ import config as cfg
 import pandas as pd
 import geopandas as gpd
 import sys
+import logging
+
+
+# Configure general logger
+logger = logging.getLogger('my_logger')
+logger.setLevel(logging.DEBUG)  # Capture all messages from DEBUG and above
+
+# Create a file handler for logging DEBUG and above messages to a file
+file_handler = logging.FileHandler('logs/assortativity_matrix.log')
+file_handler.setLevel(logging.DEBUG)
+file_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+
+# Add the handler to the logger
+logger.addHandler(file_handler)
 
 # SET VARIABLES -----------------------------------------------------------------
 
@@ -12,25 +26,30 @@ import sys
 var_of_interest = 'Renta bruta media por hogar' 
 n_income_deciles = 10
 
-if cfg.week:
+if cfg.type_of_study == 'week':
     time_of_study = 'Normal Week'
-elif cfg.weekend:
+elif cfg.type_of_study == 'weekend':
     time_of_study = 'Normal Weekend'
 else:
-    print('No time of study has been set')
+    print('No correct time of study has been set. Maybe you meant week or weekend?')
 
-print(f'In this script, I calculate {n_income_deciles} income deciles for different income data in the city of Madrid during a {time_of_study}, and build assortativity matrices for the {var_of_interest} variable in particular.')
-print(f'The variables for which income deciles are calculared are: {cfg.INCOME_VARS_OF_INTEREST}')
-print()
+logger.info("This is an info message from assortativity_matrix.py")
+logger.info(f'I calculate {n_income_deciles} income deciles for different income data in the city of Madrid')
+logger.info(f'Timeframe: {time_of_study}')
+logger.info(f'I build assortativity matrices for the {var_of_interest}')
+logger.info(f'The variables for which income deciles are calculared are: {cfg.INCOME_VARS_OF_INTEREST}')
+logger.info(f'Save figures = {cfg.SAVE_FIGURES}')
+
 # OPEN DATA ----------------------------------------------------------------------
-print('Opening data...')
+logger.info('--------------------------------------------------------------------------')
+logger.info('Opening data...')
 
 rent_data = gpd.read_file(cfg.INCOME_DATA / 'geometries_and_income.geojson') # rent data to add to the viajes data to find income per district
 rent_data = rent_data[['ID', 'geometry'] + cfg.INCOME_VARS_OF_INTEREST ] # here I select the variables of interest
 
-if cfg.week:
+if cfg.type_of_study == 'week':
     file_name = 'all_viajes_week_0222.csv'
-elif cfg.weekend:
+elif cfg.type_of_study == 'weekend':
     file_name = 'all_viajes_weekend_0222.csv'
 else:
     file_name = 'default_file.csv'  # FIXME: Fallback option if neither is True
@@ -38,11 +57,13 @@ else:
 week = pd.read_csv(cfg.MOBILITY_DATA / f'VIAJES/{file_name}') # week of interest
 week = week.loc[(week['actividad_origen'] == 'casa')] # filtering only trips from home!
 
-print('Shape of the rent dataset: ', rent_data.shape)
-print('Shape of the mobility dataset: ', week.shape)
+logger.info(f"Dataframes used: {cfg.INCOME_DATA / 'geometries_and_income.geojson'} and {cfg.MOBILITY_DATA / f'VIAJES/{file_name}'}")
+logger.info('Shape of the rent dataset: %s', rent_data.shape)
+logger.info('Shape of the mobility dataset: %s', week.shape)
+logger.info(f'All figures are saved to: ',{cfg.FIGURES_PATH})
 
 # MERGE INCOME AND MOBILITY DATA ----------------------------------------------------------------------
-
+logger.info('--------------------------------------------------------------------------')
 # 1. Adding income data per district to the mobility data, to later calculate deciles and build assortativity matrix
 viajes_with_income = pd.merge(
     week,
@@ -52,12 +73,11 @@ viajes_with_income = pd.merge(
     how='left'  # Perform a left join to keep all rows from viajes
 )
 
-print('Variable to calculate matrices on is set to: ', var_of_interest)
+logger.info(f'Variable to calculate matrices on is set to: {var_of_interest}')
 
 # CALCULATE INCOME DECILES ----------------------------------------------------------------------
-
+logger.info(f'Calculating {n_income_deciles} income deciles for the {var_of_interest} data.')
 # 2. Divide data into income deciles D for each SE class - for each origin and destination, I add the income decile 
-print(f'Calculating {n_income_deciles} income deciles for the {var_of_interest} data.')
 rent_data['income_decile'] = pd.qcut(rent_data[var_of_interest], n_income_deciles, labels=False)
 
 # Add deciles to dataframe
@@ -70,14 +90,15 @@ viajes_with_income = pd.merge(viajes_with_income, rent_data[['ID', 'income_decil
 viajes_with_income.drop(columns=['residencia', 'estudio_origen_posible', 'estudio_origen_posible', 'ID', 'ID_origin', 'ID_dest'], inplace=True)
 
 # PLOT INCOME DECILES -----------------------------------------------------------------------------------------------
-
+logger.info('--------------------------------------------------------------------------')
+logger.info('Plotting income deciles')
 bin_counts = viajes_with_income['income_decile'].value_counts().sort_index()
 bin_counts.plot(kind='bar')
 
 # 1. matplotlib. FIXME: IS this plot correct? I have to make sure it makes sense.
 plt.xlabel('Income Bin')
 plt.ylabel('Number of Entries')
-plt.title(f'Distribution of Deciles for Destination of Trips\n{time_of_study}\nVariable: {var_of_interest}')
+plt.title(f'Distribution of Deciles for Destination of Trips\n{time_of_study}\nVariable: {var_of_interest.lower()}')
 
 # 2. plotly
 fig = px.bar(
@@ -88,8 +109,9 @@ fig = px.bar(
 )
 
 if cfg.SAVE_FIGURES:
-    fig.write_html(str(cfg.FIGURES_PATH / f'{var_of_interest}_deciles_distribution_destination.html'))
-    plt.savefig(cfg.FIGURES_PATH / f'{var_of_interest}_deciles_distribution_destination.png', dpi=300, bbox_inches='tight')
+    fig.write_html(str(cfg.FIGURES_PATH / f'{var_of_interest.lower()}_deciles_distribution_destination.html'))
+    plt.savefig(cfg.FIGURES_PATH / f'{var_of_interest.lower()}_deciles_distribution_destination.png', dpi=300, bbox_inches='tight')
+    logger.info(f"Plot saved at: {cfg.FIGURES_PATH / f'{var_of_interest.lower()}_deciles_distribution_destination.png'}")
 
 # BUILD ASSORTATIVITY MATRICES ----------------------------------------------------------------------------------------
 
@@ -107,8 +129,8 @@ try:
 
 except ValueError as e:
     # If there's a ValueError (likely due to duplicate index/column pairs), fallback to pivot_table()
-    print(f"Encountered an error with pivot(): {e}")
-    print("Switching to pivot_table() to handle duplicates.")
+    logger.debug(f"Encountered an error with pivot(): {e}")
+    logger.debug("Switching to pivot_table() to handle duplicates.")
     
     # Use pivot_table() with aggregation to handle duplicates
     assortativity_matrix = trip_counts_by_decile.pivot_table(
@@ -119,11 +141,12 @@ except ValueError as e:
         fill_value=0  # Fill missing values with 0
     )
 
-# Continue with further processing or analysis of assortativity_matrix
-print("Assortativity matrix created successfully.")
+logger.info("Assortativity matrix created successfully.")
 
 # Normalize 
 assortativity_matrix_normalized = assortativity_matrix.div(assortativity_matrix.sum(axis=1), axis=0)
+
+logger.info("Assortativity matrix normalized successfully.")
 
 # PLOT AND SAVE ASSORTATIVITY MATRICES --------------------------------------------------------------------------------------
 
@@ -135,6 +158,7 @@ plt.ylabel('Home District SES')
 
 if cfg.SAVE_FIGURES:
     plt.savefig(cfg.FIGURES_PATH / f'Assortativity Matrix of Trips Between {var_of_interest} Deciles, Normal Week February 2022.png', dpi=300, bbox_inches='tight')
+    logger.info(f"Plot saved at: {cfg.FIGURES_PATH / f'Assortativity Matrix of Trips Between {var_of_interest} Deciles, Normal Week February 2022.png'}")
 
 plt.figure(figsize=(10, 8))
 sns.heatmap(assortativity_matrix_normalized, annot=False, cmap='viridis', cbar_kws={'label': 'Normalized Probability'}, fmt=".2f")
@@ -144,6 +168,9 @@ plt.ylabel('Home District SES')
 
 if cfg.SAVE_FIGURES:
     plt.savefig(cfg.FIGURES_PATH / f'Normalized Assortativity Matrix of Trips Between {var_of_interest} Deciles, Normal Week February 2022.png', dpi=300, bbox_inches='tight')
+    logger.info(f"Plot saved at: {cfg.FIGURES_PATH / f'Normalized Assortativity Matrix of Trips Between {var_of_interest} Deciles, Normal Week February 2022.png'}")
+
+logger.info("Assortativity matrix figures saved successfully")
 
 # STRATIFY MOBILITY DATA BY RENT ----------------------------------------------------------------------------------
 
@@ -166,6 +193,7 @@ plt.ylabel('Home District SES')
 
 if cfg.SAVE_FIGURES:
     plt.savefig(cfg.FIGURES_PATH /f'Assortativity Matrix of Trips Between {var_of_interest} Deciles, Normal Week February 2022, Income Bracket 10-15.png', dpi=300, bbox_inches='tight')
+    logger.info(f"Plot saved at: {cfg.FIGURES_PATH /f'Assortativity Matrix of Trips Between {var_of_interest} Deciles, Normal Week February 2022, Income Bracket 10-15.png'}")
 
 plt.figure(figsize=(10, 8))
 sns.heatmap(assortativity_matrix_high_normalized, annot=False, cmap='viridis', cbar_kws={'label': 'Normalized Probability'}, fmt=".2f")
@@ -175,7 +203,7 @@ plt.ylabel('Home District SES')
 
 if cfg.SAVE_FIGURES:
     plt.savefig(cfg.FIGURES_PATH /f'Assortativity Matrix of Trips Between {var_of_interest} Deciles, Normal Week February 2022, Income Bracket Over 15.png', dpi=300, bbox_inches='tight')
+    logger.info(f"Plot saved at: {cfg.FIGURES_PATH /f'Assortativity Matrix of Trips Between {var_of_interest} Deciles, Normal Week February 2022, Income Bracket Over 15.png'}")
 
-
-print('Done!')
+logger.info('Done!')
 sys.exit("Stopping the script")
