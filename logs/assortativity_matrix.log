@@ -1,44 +1,25 @@
-2024-09-24 22:15:11,873 - my_logger - INFO - This is an info message from assortativity_matrix.py
-2024-09-24 22:15:11,873 - my_logger - INFO - I calculate 10 income deciles for different income data in the city of Madrid
-2024-09-24 22:15:11,873 - my_logger - INFO - Timeframe: Normal Week
-2024-09-24 22:15:11,873 - my_logger - INFO - I build assortativity matrices for the Renta bruta media por hogar
-2024-09-24 22:15:11,873 - my_logger - INFO - The variables for which income deciles are calculared are: ['Media de la renta por unidad de consumo', 'Mediana de la renta por unidad de consumo', 'Renta bruta media por hogar', 'Renta bruta media por persona', 'Renta neta media por hogar', 'Renta neta media por persona ']
-2024-09-24 22:15:11,873 - my_logger - INFO - Save figures = False
-2024-09-24 22:15:11,873 - my_logger - INFO - --------------------------------------------------------------------------
-2024-09-24 22:15:11,873 - my_logger - INFO - Opening data...
-2024-09-24 22:15:14,482 - my_logger - INFO - Dataframes used: /Users/caro/Desktop/thesis_project/segregation_indices/data/processed/geometries_and_income.geojson and /Users/caro/Desktop/thesis_project/mobility_data/VIAJES/all_viajes_week_0222.csv
-2024-09-24 22:15:14,483 - my_logger - INFO - Shape of the rent dataset: (21, 8)
-2024-09-24 22:15:14,483 - my_logger - INFO - Shape of the mobility dataset: (781697, 15)
-2024-09-24 22:15:14,485 - my_logger - INFO - --------------------------------------------------------------------------
-2024-09-24 22:15:14,575 - my_logger - INFO - Variable to calculate matrices on is set to: Renta bruta media por hogar
-2024-09-24 22:15:14,575 - my_logger - INFO - Calculating 10 income deciles for the Renta bruta media por hogar data.
-2024-09-24 22:15:14,787 - my_logger - INFO - --------------------------------------------------------------------------
-2024-09-24 22:15:14,787 - my_logger - INFO - Plotting income deciles
-2024-09-24 22:15:15,322 - my_logger - DEBUG - Encountered an error with pivot(): Index contains duplicate entries, cannot reshape
-2024-09-24 22:15:15,322 - my_logger - DEBUG - Switching to pivot_table() to handle duplicates.
-2024-09-24 22:15:15,324 - my_logger - INFO - Assortativity matrix created successfully.
-2024-09-24 22:15:15,324 - my_logger - INFO - Assortativity matrix normalized successfully.
-2024-09-24 22:15:15,403 - my_logger - INFO - Assortativity matrix figures saved successfully
-2024-09-24 22:15:15,477 - my_logger - INFO - Done!
-2024-09-24 22:55:05,160 - my_logger - INFO - This is an info message from assortativity_matrix.py
-2024-09-24 22:55:05,161 - my_logger - INFO - I calculate 10 income deciles for different income data in the city of Madrid
-2024-09-24 22:55:05,161 - my_logger - INFO - Timeframe: Normal Week
-2024-09-24 22:55:05,161 - my_logger - INFO - I build assortativity matrices for the Renta bruta media por hogar
-2024-09-24 22:55:05,161 - my_logger - INFO - The variables for which income deciles are calculared are: ['Media de la renta por unidad de consumo', 'Mediana de la renta por unidad de consumo', 'Renta bruta media por hogar', 'Renta bruta media por persona', 'Renta neta media por hogar', 'Renta neta media por persona ']
-2024-09-24 22:55:05,161 - my_logger - INFO - Save figures = False
-2024-09-24 22:55:05,161 - my_logger - INFO - --------------------------------------------------------------------------
-2024-09-24 22:55:05,161 - my_logger - INFO - Opening data...
-2024-09-24 22:55:08,138 - my_logger - INFO - Dataframes used: /Users/caro/Desktop/thesis_project/segregation_indices/data/processed/geometries_and_income.geojson and /Users/caro/Desktop/thesis_project/mobility_data/VIAJES/all_viajes_week_0222.csv
-2024-09-24 22:55:08,138 - my_logger - INFO - Shape of the rent dataset: (21, 8)
-2024-09-24 22:55:08,138 - my_logger - INFO - Shape of the mobility dataset: (781697, 15)
-2024-09-24 22:55:08,140 - my_logger - INFO - --------------------------------------------------------------------------
-2024-09-24 22:55:08,228 - my_logger - INFO - Variable to calculate matrices on is set to: Renta bruta media por hogar
-2024-09-24 22:55:08,228 - my_logger - INFO - Calculating 10 income deciles for the Renta bruta media por hogar data.
-2024-09-24 22:55:08,426 - my_logger - INFO - --------------------------------------------------------------------------
-2024-09-24 22:55:08,426 - my_logger - INFO - Plotting income deciles
-2024-09-24 22:55:09,077 - my_logger - DEBUG - Encountered an error with pivot(): Index contains duplicate entries, cannot reshape
-2024-09-24 22:55:09,077 - my_logger - DEBUG - Switching to pivot_table() to handle duplicates.
-2024-09-24 22:55:09,080 - my_logger - INFO - Assortativity matrix created successfully.
-2024-09-24 22:55:09,081 - my_logger - INFO - Assortativity matrix normalized successfully.
-2024-09-24 22:55:09,159 - my_logger - INFO - Assortativity matrix figures saved successfully
-2024-09-24 22:55:09,236 - my_logger - INFO - Done!
+2024-09-26 16:23:03,574 - my_logger - INFO - I calculate 10 income deciles for different income data in the city of Madrid
+2024-09-26 16:23:03,574 - my_logger - INFO - Timeframe: Normal Week
+2024-09-26 16:23:03,574 - my_logger - INFO - I build assortativity matrices for the Renta bruta media por hogar
+2024-09-26 16:23:03,574 - my_logger - INFO - The variables for which income deciles are calculared are: ['Media de la renta por unidad de consumo', 'Mediana de la renta por unidad de consumo', 'Renta bruta media por hogar', 'Renta bruta media por persona', 'Renta neta media por hogar', 'Renta neta media por persona ']
+2024-09-26 16:23:03,574 - my_logger - INFO - Save figures = False
+2024-09-26 16:23:03,574 - my_logger - INFO - Figures path: /Users/caro/Desktop/thesis_project/segregation_indices/figures/week
+2024-09-26 16:23:03,574 - my_logger - INFO - Opening data...
+2024-09-26 16:23:06,185 - my_logger - INFO - Dataframes used: /Users/caro/Desktop/thesis_project/segregation_indices/data/processed/geometries_and_income.geojson and /Users/caro/Desktop/thesis_project/mobility_data/VIAJES/all_viajes_week_0222.csv
+2024-09-26 16:23:06,185 - my_logger - INFO - Shape of the rent dataset: (21, 8)
+2024-09-26 16:23:06,185 - my_logger - INFO - Shape of the mobility dataset: (781697, 15)
+2024-09-26 16:23:06,185 - my_logger - INFO - 1. Merging mobility and income data
+2024-09-26 16:23:06,267 - my_logger - INFO - Variable to calculate matrices on is set to: Renta bruta media por hogar
+2024-09-26 16:23:06,268 - my_logger - INFO - 2. Calculating 10 income deciles for the Renta bruta media por hogar data.
+2024-09-26 16:23:06,484 - my_logger - INFO - Plotting income deciles
+2024-09-26 16:23:07,129 - my_logger - INFO - Income deciles for ['Media de la renta por unidad de consumo', 'Mediana de la renta por unidad de consumo', 'Renta bruta media por hogar', 'Renta bruta media por persona', 'Renta neta media por hogar', 'Renta neta media por persona '] saved!
+2024-09-26 16:23:07,129 - my_logger - INFO - Building assortativity matrices...
+2024-09-26 16:23:07,174 - my_logger - DEBUG - Encountered an error with pivot(): Index contains duplicate entries, cannot reshape
+2024-09-26 16:23:07,174 - my_logger - DEBUG - Switching to pivot_table() to handle duplicates.
+2024-09-26 16:23:07,177 - my_logger - INFO - Assortativity matrix created successfully!
+2024-09-26 16:23:07,177 - my_logger - INFO - Assortativity matrix normalized successfully!
+2024-09-26 16:23:07,258 - my_logger - INFO - Assortativity matrix figures for Renta bruta media por hogar saved successfully!
+2024-09-26 16:23:07,260 - my_logger - INFO - Stratifying mobility data by rent...
+2024-09-26 16:23:07,260 - my_logger - DEBUG - Put more thought into this, and review
+2024-09-26 16:23:07,260 - my_logger - INFO - Plotting assortativity matrices stratified by rent...
+2024-09-26 16:23:07,332 - my_logger - INFO - Assortativity matrices for Renta bruta media por hogar saved!

@@ -1,0 +1,6 @@
+2024-09-26 16:37:15,328 - my_logger - INFO - Extracting trips from basicos_distritos_viajes_202202
+2024-09-26 16:37:15,328 - my_logger - INFO - Timeframe of study: week
+2024-09-26 16:37:15,328 - my_logger - INFO - Days of interest: [6, 7, 8, 9, 10]
+2024-09-26 16:37:15,564 - my_logger - INFO - Shape of all viajes: (3182591, 15)
+2024-09-26 16:37:15,564 - my_logger - INFO - Figures saved to: viajes/all_viajes_week_0222.csv
+2024-09-26 16:37:15,737 - my_logger - INFO - Done!
