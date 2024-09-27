@@ -1,12 +1,20 @@
 pandas
 geopandas
+numpy
+# segregation measures
+libpysal
+esda
+splot
+# plotting
+plotly
 seaborn
 matplotlib
 contextily
 mapclassify
-numpy
-libpysal
-esda
-plotly
+# unknown
 nbformat>=4.2.0
-kaleido
+kaleido # maybe i dont use this
+
+#for graphs
+dash
+dash_cytoscape
