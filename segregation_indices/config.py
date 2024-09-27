@@ -25,7 +25,7 @@ DATASETS_PATH = ROOT_PATH / 'datasets'
 # NOTE: These variables need to be set by the user
 # 1. Date of interest
 
-type_of_study = 'morans' # 'week', 'weekend', or 'morans'
+type_of_study = 'week' # 'week', 'weekend', or 'morans'
 
 # 2. Dynamic figures folder
 
@@ -37,4 +37,4 @@ INCOME_VARS_OF_INTEREST = ['Media de la renta por unidad de consumo','Mediana de
                             'Renta neta media por hogar', 'Renta neta media por persona ']
 
 # 4. Save figures
-SAVE_FIGURES = True
+SAVE_FIGURES = False

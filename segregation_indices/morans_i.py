@@ -1,6 +1,7 @@
 import config as cfg
 import pandas as pd 
 import geopandas as gpd
+import logging
 # for plotting
 import seaborn as sns
 import contextily as ctx
@@ -18,22 +19,36 @@ to see if the distribution of rent in the districts of Madrid is dispersed rando
 To calculate Moran's I, I use the PYSAL library to first calculate the weights 
 (in this case, Queen, but I need to justify why and do some more research on this).
 Then, I apply the Moran's I equation by using a built-in method: mi_income = Moran(merged['Total'], w)
+
+Great source: https://geographicdata.science/book/notebooks/07_local_autocorrelation.html
 '''
 
-print(f'In this script, I plot income quantiles and calculate different Morans I statistics in the city of Madrid for income data from 2021.')
-print(f'The variables for which income quantiles and Morans I statistics are calculared are: {cfg.INCOME_VARS_OF_INTEREST}')
-print()
+# Configure general logger
+logger = logging.getLogger('my_logger')
+logger.setLevel(logging.DEBUG)  # Capture all messages from DEBUG and above
 
+# Create a file handler for logging DEBUG and above messages to a file
+file_handler = logging.FileHandler('logs/morans_i.log')
+file_handler.setLevel(logging.DEBUG)
+file_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+
+# Add the handler to the logger
+logger.addHandler(file_handler)
+
+
+logger.info(f'In this script, I plot income quantiles and calculate different Morans I statistics in the city of Madrid for income data from 2021.')
+logger.info(f'The variables for which income quantiles and Morans I statistics are calculared are: {cfg.INCOME_VARS_OF_INTEREST}')
+logger.info(f'Figures path: {cfg.FIGURES_PATH}')
 # READ DATA ------------------------------------------------------------------------------------------------------
 
-print('Reading the data...')
+logger.info('Reading the data...')
 merged = gpd.read_file(cfg.INCOME_DATA / 'geometries_and_income.geojson') # TODO: Fix path
 gdf = merged[['ID', 'geometry'] + cfg.INCOME_VARS_OF_INTEREST] # here I select the variable of interest
 gdf = gdf.reset_index(drop=True) # reset the index to calculate the weights with no problems
 
 # PLOT INCOME QUANTILES FOR EACH INCOME VARIABLE OF INTEREST -----------------------------------------------------
 
-print(f'Plotting income quantiles for {cfg.INCOME_VARS_OF_INTEREST}...')
+logger.info(f'Plotting income quantiles for {cfg.INCOME_VARS_OF_INTEREST}...')
 for var in cfg.INCOME_VARS_OF_INTEREST:
     fig, ax = plt.subplots(figsize=(12, 8))
 
@@ -61,9 +76,11 @@ for var in cfg.INCOME_VARS_OF_INTEREST:
     if cfg.SAVE_FIGURES:
         fig.savefig(cfg.FIGURES_PATH / f'{var.lower()}_quantiles.png', dpi=300, bbox_inches='tight')
 
+logger.info(f'Income quantiles for {cfg.INCOME_VARS_OF_INTEREST} saved!')
+
 # CALCULATE WEIGHTS ---------------------------------------------------------------------------------------------
 
-print('Calculating spatial weights...')
+logger.info('Calculating spatial weights...')
 # Create spatial weights based on adjacency (Queen Contiguity)
 w = Queen.from_dataframe(gdf) # TODO: Check details on how to do this properly
 w.transform = 'r'
@@ -97,8 +114,11 @@ ax.set_axis_off()
 if cfg.SAVE_FIGURES:
     plt.savefig(cfg.FIGURES_PATH / 'queen_contiguity_weights.png', dpi=300, bbox_inches='tight')
 
+logger.info(f'Contiguity weights saved!')
+
 # CALCULATE DIFFERENT MORAN'S I STATS FOR EACH VARIABLE OF INTEREST ---------------------------------------------------------------------------------------------
-print(f'Calculating Morans I statistics for the different variables of interest: {cfg.INCOME_VARS_OF_INTEREST}...')
+
+logger.info(f'Calculating Morans I statistics for the different variables of interest: {cfg.INCOME_VARS_OF_INTEREST}...')
 results_list = []
 
 for var in cfg.INCOME_VARS_OF_INTEREST:
@@ -123,9 +143,11 @@ morans_i_df = pd.DataFrame(results_list) # for each moran statistic of interest,
 if cfg.SAVE_FIGURES:
     morans_i_df.to_csv(cfg.OUTPUTS_PATH / 'morans_i_df.csv', index=False)
 
+logger.info(f'Morans I statistics for {cfg.INCOME_VARS_OF_INTEREST} saved as a dataframe!')
+
 # PLOT LOCAL MORAN'S I. TODO: REVIEW THE CODE, IT IS CONFUSING ---------------------------------------------------------------------------------------------
 
-print('Building and plotting Local Morans I...')
+logger.info('Building and plotting Local Morans I...')
 
 # TODO: Add p-values and z-scores to the graphs!
 for var in cfg.INCOME_VARS_OF_INTEREST:
@@ -176,9 +198,11 @@ for var in cfg.INCOME_VARS_OF_INTEREST:
     # Remove the LISA column to avoid conflicts in the next iteration
     gdf.drop(columns=[f'lisa_{var.replace(" ", "_").lower()}'], inplace=True)
 
+logger.info(f'Local Morans I maps for {cfg.INCOME_VARS_OF_INTEREST} saved!')
+
 # BUILD MORAN'S PLOT ---------------------------------------------------------------------------------------------
 
-print('Building and plotting Morans Plot...')
+logger.info('Building and plotting Morans Plot...')
 for var in cfg.INCOME_VARS_OF_INTEREST:
     gdf[f"mean_{var}_std"] = gdf[var] - gdf[var].mean() # calculate mean for each income var. of interest
     gdf[f"mean_{var}_lag_std"] = lag_spatial( # calculate lag for each var. of interest
@@ -207,4 +231,5 @@ for var in cfg.INCOME_VARS_OF_INTEREST:
     if cfg.SAVE_FIGURES:
         plt.savefig(cfg.FIGURES_PATH / f'moran_plot_{var.replace(" ", "_").lower()}.png', dpi=300, bbox_inches='tight')
 
-print('Done!')
+logger.info(f'Morans Plot for {cfg.INCOME_VARS_OF_INTEREST} saved!')
+logger.info('Done!')

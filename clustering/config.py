@@ -20,20 +20,3 @@ OUTPUTS_PATH = ROOT_PATH / FOLDER_PATH / 'outputs'
 FIGURES_PATH = ROOT_PATH / FOLDER_PATH / 'figures'
 
 DATASETS_PATH = ROOT_PATH / 'datasets'
-
-# NOTE: These variables need to be set by the user
-# 1. Date of interest (week/weekend, specific days)
-
-type_of_study = 'week' # or 'weekend', or 'morans'
-WEEK_DAYS =  [6,7,8,9,10] # days of the month to study (normal week)
-WEEKEND_DAYS =  [4,5] # days of the month to study (normal weekend)
-
-# 3. Dynamic figures folder
-
-FIGURES_PATH = FIGURES_PATH / type_of_study
-
-# 4. Save figures
-SAVE_FIGURES = False
-
-# 5. Save dataframes
-SAVE_DFS = False
