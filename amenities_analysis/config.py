@@ -3,7 +3,7 @@ from pathlib import Path
 # Set the root path
 # ROOT_PATH = Path('C:/Users/rqg886/Desktop/THESIS_PROJECT')
 ROOT_PATH = Path('/Users/caro/Desktop/thesis_project')
-FOLDER_PATH = 'amenities_analysis'
+FOLDER_PATH = 'segregation_indices'
 
 # general folders
 METRO_DATA = ROOT_PATH / 'metro_data' 
@@ -17,6 +17,5 @@ GEOMETRIA_DATA = MOBILITY_DATA / 'GEOMETRIA'
 ZONIFICACION_DATA = MOBILITY_DATA / 'ZONIFICACION' 
 
 OUTPUTS_PATH = ROOT_PATH / FOLDER_PATH / 'outputs'
+INCOME_DATA = ROOT_PATH / FOLDER_PATH / 'data/processed'
 FIGURES_PATH = ROOT_PATH / FOLDER_PATH / 'figures'
-
-DATASETS_PATH = ROOT_PATH / 'datasets'

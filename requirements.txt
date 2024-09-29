@@ -18,3 +18,8 @@ kaleido # maybe i dont use this
 #for graphs
 dash
 dash_cytoscape
+
+# for amenity analysis
+osmnx
+pandana
+tqdm

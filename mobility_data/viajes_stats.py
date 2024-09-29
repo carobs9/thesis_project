@@ -57,10 +57,15 @@ print('Plotting and Saving')
 # Use a color palette for all plots
 palette = sns.color_palette("mako")
 
-# Plot and save each variable one at a time
+# Plot and save filtered dataframe
 for var in vars_to_plot:
     save_path = cfg.FIGURES_PATH / f'{var.lower()}_distribution_only_home_origin_{data_name.lower()}.png'
     plot_and_save_var(df, var, palette, save_path)
+
+# Plot and save unfiltered dataframe (including trips with a different origin than home)
+for var in vars_to_plot:
+    save_path = cfg.FIGURES_PATH / f'{var.lower()}_distribution_{data_name.lower()}.png'
+    plot_and_save_var(all_viajes, var, palette, save_path)
 
 print('Done')
 

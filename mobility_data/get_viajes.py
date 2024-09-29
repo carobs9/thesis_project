@@ -22,15 +22,14 @@ file_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelnam
 # Add the handler to the logger
 logger.addHandler(file_handler)
 
-
 if cfg.type_of_study == 'week':
-    viajes = open_gz_by_district(cfg.VIAJES_DATA / 'basicos_distritos_viajes_202202', cfg.WEEK_DAYS, district_code='28079') # substracting trips in Madrid districts during day 7 to 11 of Feb 
+    viajes = open_gz_by_district(cfg.VIAJES_DATA / cfg.DF_OF_INTEREST, cfg.WEEK_DAYS, district_code='28079') # substracting trips in Madrid districts during day 7 to 11 of Feb 
 elif cfg.type_of_study == 'weekend':
-    viajes = open_gz_by_district(cfg.VIAJES_DATA / 'basicos_distritos_viajes_202202', cfg.WEEKEND_DAYS, district_code='28079') # substracting trips in Madrid districts during day 5 to 6 of Feb 
+    viajes = open_gz_by_district(cfg.VIAJES_DATA / cfg.DF_OF_INTEREST, cfg.WEEKEND_DAYS, district_code='28079') # substracting trips in Madrid districts during day 5 to 6 of Feb 
 else:
     print('No time of study has been set')
 
-logger.info('Extracting trips from basicos_distritos_viajes_202202')
+logger.info(f'Extracting trips from {cfg.DF_OF_INTEREST}')
 logger.info(f'Timeframe of study: {cfg.type_of_study}')
 
 if cfg.type_of_study == 'week':

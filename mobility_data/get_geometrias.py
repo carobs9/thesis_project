@@ -56,17 +56,17 @@ district_mapping = {
 
 # Adding a new column with the actual district name
 logging.info('Mapping ugly names to actual comercial names...')
-ciudad_madrid['name_2'] = ciudad_madrid['name'].map(district_mapping)
+ciudad_madrid.loc[:, 'name_2'] = ciudad_madrid['name'].map(district_mapping)
 
 if cfg.SAVE_DFS:
     ciudad_madrid.to_csv(cfg.ZONIFICACION_DATA / 'distritos/PROCESSED_nombres_distritos.csv', index=False)
     logging.info(f'Saving dataframe containing names of districts to {cfg.ZONIFICACION_DATA}')
 
 gdf = gpd.read_file(cfg.ZONIFICACION_DATA / 'distritos/shapes/zonificacion_distritos.shp') # all districts as polygons
-centroides = gpd.read_file(cfg.ZONIFICACION_DATA / 'distritos/shapes/zonificacion_distritos_centroides.shp') # all districts as centroids
+# centroides = gpd.read_file(cfg.ZONIFICACION_DATA / 'distritos/shapes/corrected_zonificacion_distritos_centroides.shp') # all districts as centroids
 
 madrid_city_gdf = gdf[gdf['ID'].isin(ciudad_madrid['ID'])] # building a gdf containing only districts in the city of Madrid
-madrid_city_centroids = centroides[centroides['ID'].isin(ciudad_madrid['ID'])] # building a gdf containing only districts in the city of Madrid
+# madrid_city_centroids = centroides[centroides['ID'].isin(ciudad_madrid['ID'])] # building a gdf containing only districts in the city of Madrid
 
 if cfg.SAVE_DFS:
     madrid_city_gdf.to_file(cfg.ZONIFICACION_DATA / 'distritos/madrid_gdf.geojson', driver="GeoJSON")

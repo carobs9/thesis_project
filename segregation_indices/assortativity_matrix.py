@@ -6,6 +6,8 @@ import pandas as pd
 import geopandas as gpd
 import sys
 import logging
+from scipy.stats import pearsonr
+import numpy as np
 
 # Configure general logger
 logger = logging.getLogger('my_logger')
@@ -22,7 +24,7 @@ logger.addHandler(file_handler)
 # SET VARIABLES -----------------------------------------------------------------
 
 # FIXME: Make more efficient, and fix variable names to plot nicely
-var_of_interest = 'Renta bruta media por hogar' 
+var_of_interest = 'Renta neta media por hogar' 
 n_income_deciles = 10
 
 if cfg.type_of_study == 'week':
@@ -38,6 +40,61 @@ logger.info(f'I build assortativity matrices for the {var_of_interest}')
 logger.info(f'The variables for which income deciles are calculared are: {cfg.INCOME_VARS_OF_INTEREST}')
 logger.info(f'Save figures = {cfg.SAVE_FIGURES}')
 logger.info(f'Figures path: {cfg.FIGURES_PATH}')
+
+
+# FUNCTIONS -----------------------------------------------------------------------
+
+def plot_assortativity_matrix(assortativity_matrix, name_of_figure, pearson=None, p_value=None, cmap='viridis'):
+    """
+    Plots the assortativity matrix of trips between deciles.
+    Parameters:
+    - assortativity_matrix (pd.DataFrame): The assortativity matrix to plot.
+    - time_of_study (str): Description of the study period (e.g., "Normal Week").
+    - var_of_interest (str): The variable of interest for the matrix (e.g., "Renta bruta media por hogar").
+    - cmap (str): Color map to use for the heatmap.
+    - save_fig (bool): Whether to save the figure to file.
+    - fig_path (str or Path): Path to save the figure if save_fig is True.
+    Returns:
+    - None
+    """
+    title = f'Assortativity Matrix of Trips Between Deciles\n'
+    title += f'{time_of_study}\nVariable: {var_of_interest.lower()}'
+    if pearson is not None:
+        title += f'\nPearson: {pearson:.4f}'
+    if p_value is not None:
+        title += f'\np-value: {p_value:.4f}'
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(
+        assortativity_matrix, 
+        annot=False, 
+        cmap=cmap, 
+        cbar_kws={'label': 'Number of Trips'}, 
+        fmt=".2f"
+    )
+    plt.title(title)
+    # plt.title(f'Assortativity Matrix of Trips Between Deciles\n{time_of_study}\nVariable: {var_of_interest}\nPearson:{pearson}\np-value:{p_value}')
+    plt.xlabel('Destination District SES')
+    plt.ylabel('Home District SES')
+    if cfg.SAVE_FIGURES:
+        plt.savefig(cfg.FIGURES_PATH / f'{name_of_figure}', dpi=300, bbox_inches='tight')
+        print(f"Figure saved at: {cfg.FIGURES_PATH}")
+    plt.show()
+
+def calculate_assortativity_coefficient(normalized_matrix): 
+    # FIXME: Review this procedure! it might be very wrong, I am unsure about the math behind it
+    # Flatten the matrix and extract indices
+    i_indices, j_indices = np.meshgrid(np.arange(normalized_matrix.shape[0]), 
+                                    np.arange(normalized_matrix.shape[1]), 
+                                    indexing='ij')
+
+    # Flatten the matrix and indices
+    i_indices_flat = i_indices.flatten()
+    j_indices_flat = j_indices.flatten()
+    matrix_flat = normalized_matrix.values.flatten()
+
+    # Calculate Pearson correlation coefficient
+    rho, p_value = pearsonr(i_indices_flat * j_indices_flat, matrix_flat)
+    return rho, p_value
 
 # OPEN DATA ----------------------------------------------------------------------
 
@@ -153,30 +210,6 @@ assortativity_matrix_normalized = assortativity_matrix.div(assortativity_matrix.
 
 logger.info("Assortativity matrix normalized successfully!")
 
-# PLOT AND SAVE ASSORTATIVITY MATRICES --------------------------------------------------------------------------------------
-
-plt.figure(figsize=(10, 8))
-sns.heatmap(assortativity_matrix, annot=False, cmap='viridis', cbar_kws={'label': 'Number of Trips'}, fmt=".2f")
-plt.title(f'Assortativity Matrix of Trips Between Deciles\n{time_of_study}\nVariable: {var_of_interest}')
-plt.xlabel('Destination District SES')
-plt.ylabel('Home District SES')
-
-if cfg.SAVE_FIGURES:
-    plt.savefig(cfg.FIGURES_PATH / f'Assortativity Matrix of Trips Between {var_of_interest} Deciles, Normal Week February 2022.png', dpi=300, bbox_inches='tight')
-    logger.info(f"Plot saved at: {cfg.FIGURES_PATH / f'Assortativity Matrix of Trips Between {var_of_interest} Deciles, Normal Week February 2022.png'}")
-
-plt.figure(figsize=(10, 8))
-sns.heatmap(assortativity_matrix_normalized, annot=False, cmap='viridis', cbar_kws={'label': 'Normalized Probability'}, fmt=".2f")
-plt.title(f'Normalized Assortativity Matrix of Trips Between Deciles\n{time_of_study}\nVariable: {var_of_interest}')
-plt.xlabel('Destination District SES')
-plt.ylabel('Home District SES')   
-
-if cfg.SAVE_FIGURES:
-    plt.savefig(cfg.FIGURES_PATH / f'Normalized Assortativity Matrix of Trips Between {var_of_interest} Deciles, Normal Week February 2022.png', dpi=300, bbox_inches='tight')
-    logger.info(f"Plot saved at: {cfg.FIGURES_PATH / f'Normalized Assortativity Matrix of Trips Between {var_of_interest} Deciles, Normal Week February 2022.png'}")
-
-logger.info(f"Assortativity matrix figures for {var_of_interest} saved successfully!")
-
 # STRATIFY MOBILITY DATA BY RENT ----------------------------------------------------------------------------------
 
 middle = trip_counts_by_decile[trip_counts_by_decile['renta']=='10-15']
@@ -191,29 +224,23 @@ assortativity_matrix_high_normalized = assortativity_matrix_high.div(assortativi
 logger.info('Stratifying mobility data by rent...')
 logger.debug('Put more thought into this, and review')
 
+
+# GET ASSORTATIVITY COEFFICIENT AND P-VALUE ------------------------------------------------------------------------
+
+rho, p_value = calculate_assortativity_coefficient(assortativity_matrix_normalized)  
+rho_middle, p_value_middle = calculate_assortativity_coefficient(assortativity_matrix_middle_normalized)  
+rho_high, p_value_high = calculate_assortativity_coefficient(assortativity_matrix_high_normalized)  
+
 # PLOT ASSORTATIVITY MATRICES STRATIFIED BY RENT ------------------------------------------------------------------
 
-logger.info('Plotting assortativity matrices stratified by rent...')
+plot_assortativity_matrix(assortativity_matrix, f'assortativity_matrix_{var_of_interest.lower()}.png')
+plot_assortativity_matrix(assortativity_matrix_normalized, f'normalized_assortativity_matrix_{var_of_interest.lower()}.png', rho, p_value)
 
-plt.figure(figsize=(10, 8))
-sns.heatmap(assortativity_matrix_middle_normalized, annot=False, cmap='viridis', cbar_kws={'label': 'Normalized Probability'}, fmt=".2f")
-plt.title(f'Assortativity Matrix of Trips Between Deciles, Income Bracket 10-15\n{time_of_study}\nVariable: {var_of_interest}')
-plt.xlabel('Destination District SES')
-plt.ylabel('Home District SES')
+plot_assortativity_matrix(assortativity_matrix_middle_normalized, f'10_15_bracket_normalized_assortativity_matrix_{var_of_interest.lower()}.png', rho_middle, p_value_middle)
+plot_assortativity_matrix(assortativity_matrix_high_normalized, f'15_bracket_normalized_assortativity_matrix_{var_of_interest.lower()}.png', rho_high, p_value_high)
 
-if cfg.SAVE_FIGURES:
-    plt.savefig(cfg.FIGURES_PATH /f'Assortativity Matrix of Trips Between {var_of_interest} Deciles, Normal Week February 2022, Income Bracket 10-15.png', dpi=300, bbox_inches='tight')
-    logger.info(f"Plot saved at: {cfg.FIGURES_PATH /f'Assortativity Matrix of Trips Between {var_of_interest} Deciles, Normal Week February 2022, Income Bracket 10-15.png'}")
+# PLOT AND SAVE ASSORTATIVITY MATRICES --------------------------------------------------------------------------------------
 
-plt.figure(figsize=(10, 8))
-sns.heatmap(assortativity_matrix_high_normalized, annot=False, cmap='viridis', cbar_kws={'label': 'Normalized Probability'}, fmt=".2f")
-plt.title(f'Assortativity Matrix of Trips Between Deciles,  Income Bracket >15\n{time_of_study}\nVariable: {var_of_interest}')
-plt.xlabel('Destination District SES')
-plt.ylabel('Home District SES')
+logger.info(f"All assortativity matrices figures for {var_of_interest} saved successfully!")
 
-if cfg.SAVE_FIGURES:
-    plt.savefig(cfg.FIGURES_PATH /f'Assortativity Matrix of Trips Between {var_of_interest} Deciles, Normal Week February 2022, Income Bracket Over 15.png', dpi=300, bbox_inches='tight')
-    logger.info(f"Plot saved at: {cfg.FIGURES_PATH /f'Assortativity Matrix of Trips Between {var_of_interest} Deciles, Normal Week February 2022, Income Bracket Over 15.png'}")
-
-logger.info(f'Assortativity matrices for {var_of_interest} saved!')
 sys.exit("Stopping the script")

@@ -28,12 +28,15 @@ type_of_study = 'week' # or 'weekend', or 'morans'
 WEEK_DAYS =  [6,7,8,9,10] # days of the month to study (normal week)
 WEEKEND_DAYS =  [4,5] # days of the month to study (normal weekend)
 
+# 2. Dataframe of interest
+DF_OF_INTEREST = 'basicos_distritos_viajes_202202' # change accordningly: 'basicos_distritos_viajes_yyyymm'
+
 # 3. Dynamic figures folder
 
 FIGURES_PATH = FIGURES_PATH / type_of_study
 
 # 4. Save figures
-SAVE_FIGURES = False
+SAVE_FIGURES = True
 
 # 5. Save dataframes
 SAVE_DFS = False

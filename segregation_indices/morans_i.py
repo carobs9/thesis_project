@@ -2,6 +2,7 @@ import config as cfg
 import pandas as pd 
 import geopandas as gpd
 import logging
+import numpy as np
 # for plotting
 import seaborn as sns
 import contextily as ctx
@@ -46,44 +47,13 @@ merged = gpd.read_file(cfg.INCOME_DATA / 'geometries_and_income.geojson') # TODO
 gdf = merged[['ID', 'geometry'] + cfg.INCOME_VARS_OF_INTEREST] # here I select the variable of interest
 gdf = gdf.reset_index(drop=True) # reset the index to calculate the weights with no problems
 
-# PLOT INCOME QUANTILES FOR EACH INCOME VARIABLE OF INTEREST -----------------------------------------------------
-
-logger.info(f'Plotting income quantiles for {cfg.INCOME_VARS_OF_INTEREST}...')
-for var in cfg.INCOME_VARS_OF_INTEREST:
-    fig, ax = plt.subplots(figsize=(12, 8))
-
-    gdf.plot( # plot income var. of interest
-        column=var,
-        cmap="coolwarm",
-        scheme="quantiles",
-        k=5, # 5 quantiles
-        edgecolor="black",
-        linewidth=0.5,
-        alpha=0.9,
-        legend=True,
-        legend_kwds={"loc": "upper left"},
-        ax=ax
-    )
-    
-    # Add basemap
-    ctx.add_basemap(ax, crs=gdf.crs, source=ctx.providers.OpenStreetMap.Mapnik)
-    
-    # Set title and remove axis
-    ax.set_title(f'Quantiles of {var.lower()}', fontsize=15)
-    ax.set_axis_off()
-    
-    # Save each figure
-    if cfg.SAVE_FIGURES:
-        fig.savefig(cfg.FIGURES_PATH / f'{var.lower()}_quantiles.png', dpi=300, bbox_inches='tight')
-
-logger.info(f'Income quantiles for {cfg.INCOME_VARS_OF_INTEREST} saved!')
 
 # CALCULATE WEIGHTS ---------------------------------------------------------------------------------------------
 
 logger.info('Calculating spatial weights...')
 # Create spatial weights based on adjacency (Queen Contiguity)
 w = Queen.from_dataframe(gdf) # TODO: Check details on how to do this properly
-w.transform = 'r'
+w.transform = 'r' # FIXME: What is this step? is it needed?
 
 # cardinalities frequency figure
 pd.Series(w.cardinalities).plot.hist(color="k");
@@ -116,48 +86,61 @@ if cfg.SAVE_FIGURES:
 
 logger.info(f'Contiguity weights saved!')
 
-# CALCULATE DIFFERENT MORAN'S I STATS FOR EACH VARIABLE OF INTEREST ---------------------------------------------------------------------------------------------
+# CALCULATE GLOBAL MORAN'S I STATS FOR EACH VARIABLE OF INTEREST ---------------------------------------------------------------------------------------------
 
-logger.info(f'Calculating Morans I statistics for the different variables of interest: {cfg.INCOME_VARS_OF_INTEREST}...')
-results_list = []
+logger.info(f'Calculating Global Morans I statistics for the different variables of interest: {cfg.INCOME_VARS_OF_INTEREST}...')
+np.random.seed(123456)
 
-for var in cfg.INCOME_VARS_OF_INTEREST:
-    # Global Moran's I
-    mi = Moran(gdf[var], w)
-    
-    # Local Moran's I (LISA)
-    lisa = Moran_Local(gdf[var], w)
-    
-    # Append the results to the new DataFrame
-    results_list.append({
-        'var': var,
-        'global_moran_i': mi.I,
-        'global_p_value': mi.p_sim,
-        'global_z_score': mi.z_norm,
-        'local_moran_i_values': lisa.Is.tolist(),   # Convert array to list
-        'local_p_values': lisa.p_sim.tolist(),      # Convert array to list
-        'local_z_scores': lisa.z_sim.tolist()       # Convert array to list
-    })
+# Calculate Moran's I for each variable
+global_mi = [
+    Moran(gdf[variable], w) for variable in cfg.INCOME_VARS_OF_INTEREST
+]
+# Structure results as a list of tuples
+mi_results = [
+    (variable, res.I, res.p_sim, res.z_sim)
+    for variable, res in zip(cfg.INCOME_VARS_OF_INTEREST, global_mi)
+]
 
-morans_i_df = pd.DataFrame(results_list) # for each moran statistic of interest, there's an array with 21 values (number of districts)
+global_moran = pd.DataFrame(
+    mi_results, columns=["Variable", "Global Morans I", "P-value", "Z-Score"]
+).set_index("Variable")
+
 if cfg.SAVE_FIGURES:
-    morans_i_df.to_csv(cfg.OUTPUTS_PATH / 'morans_i_df.csv', index=False)
+    global_moran.to_csv(cfg.OUTPUTS_PATH / 'global_morans_i_df.csv', index=True)
 
-logger.info(f'Morans I statistics for {cfg.INCOME_VARS_OF_INTEREST} saved as a dataframe!')
+# CALCULATE LOCAL MORAN'S I STATS FOR EACH VARIABLE OF INTEREST ---------------------------------------------------------------------------------------------
+
+local_mi = [
+    Moran_Local(gdf[variable], w) for variable in cfg.INCOME_VARS_OF_INTEREST
+]
+
+mi_results_local = [
+    (variable, res.Is, res.p_sim, res.z_sim, res.q)
+    for variable, res in zip(cfg.INCOME_VARS_OF_INTEREST, local_mi)
+]
+
+local_moran = pd.DataFrame(
+    mi_results_local, columns=["Variable", "Local Morans I","P-value", "Z-Score",  "Quadrant"]
+).set_index("Variable")
+
+if cfg.SAVE_FIGURES:
+    local_moran.to_csv(cfg.OUTPUTS_PATH / 'local_morans_i_df.csv', index=True)
+
+logger.info(f'Local Morans I statistics for {cfg.INCOME_VARS_OF_INTEREST} saved as a dataframe!')
+
 
 # PLOT LOCAL MORAN'S I. TODO: REVIEW THE CODE, IT IS CONFUSING ---------------------------------------------------------------------------------------------
 
 logger.info('Building and plotting Local Morans I...')
 
-# TODO: Add p-values and z-scores to the graphs!
 for var in cfg.INCOME_VARS_OF_INTEREST:
     # Get the corresponding Local Moran's I values from the results DataFrame
-    local_moran_values = morans_i_df.loc[morans_i_df['var'] == var, 'local_moran_i_values'].values[0]
+    local_moran_values = local_moran.loc[local_moran.index == var, 'Local Morans I'].values[0]
     
     # Retrieve global statistics for the current variable
-    global_p_value = morans_i_df.loc[morans_i_df['var'] == var, 'global_p_value'].values[0]
-    global_z_score = morans_i_df.loc[morans_i_df['var'] == var, 'global_z_score'].values[0]
-    global_moran_i = morans_i_df.loc[morans_i_df['var'] == var, 'global_moran_i'].values[0]
+    global_p_value = global_moran.loc[global_moran.index == var, 'P-value'].values[0]
+    global_z_score = global_moran.loc[global_moran.index == var, 'Z-Score'].values[0]
+    global_moran_i = global_moran.loc[global_moran.index == var, 'Global Morans I'].values[0]
     
     # Add the Local Moran's I values to the GeoDataFrame
     gdf[f'lisa_{var.replace(" ", "_").lower()}'] = local_moran_values
@@ -166,7 +149,7 @@ for var in cfg.INCOME_VARS_OF_INTEREST:
     fig, ax = plt.subplots(1, figsize=(6, 6))
     gdf.plot(
         column=f'lisa_{var.replace(" ", "_").lower()}',  # Column containing the LISA values
-        cmap='coolwarm',        # Use the coolwarm colormap
+        cmap='RdPu',        # Use the RdPu colormap
         legend=True,            # Show legend
         ax=ax                   # Axis to plot on
     )
@@ -191,7 +174,6 @@ for var in cfg.INCOME_VARS_OF_INTEREST:
     # Remove axis labels
     ax.set_axis_off()
     
-    # Save and show the plot
     if cfg.SAVE_FIGURES:
         plt.savefig(cfg.FIGURES_PATH / f'local_moran_map_{var.replace(" ", "_").lower()}.png', dpi=300, bbox_inches='tight')
     
