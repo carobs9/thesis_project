@@ -1,16 +1,8 @@
 import config as cfg
-import pandas as pd 
 import geopandas as gpd
-import numpy as np
-import logging
 # for plotting
 import seaborn as sns
-import contextily as ctx
 import matplotlib.pyplot as plt
-# for Moran's I
-from libpysal.weights import Queen
-from esda.moran import Moran, Moran_Local
-from libpysal.weights import lag_spatial
 
 '''
 Great source: https://geographicdata.science/book/notebooks/07_local_autocorrelation.html

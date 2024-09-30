@@ -1,8 +1,8 @@
 from pathlib import Path
 
 # Set the root path
-# ROOT_PATH = Path('C:/Users/rqg886/Desktop/THESIS_PROJECT')
-ROOT_PATH = Path('/Users/caro/Desktop/thesis_project')
+ROOT_PATH = Path('C:/Users/rqg886/Desktop/THESIS_PROJECT')
+# ROOT_PATH = Path('/Users/caro/Desktop/thesis_project')
 FOLDER_PATH = 'mobility_data'
 
 # general folders
@@ -39,4 +39,7 @@ FIGURES_PATH = FIGURES_PATH / type_of_study
 SAVE_FIGURES = True
 
 # 5. Save dataframes
-SAVE_DFS = False
+SAVE_DFS = True
+
+# 6. Selecting metropolitan area instead of just downtown for the study
+METROPOLITAN = True
