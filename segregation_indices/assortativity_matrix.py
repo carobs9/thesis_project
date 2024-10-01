@@ -27,10 +27,10 @@ logger.addHandler(file_handler)
 var_of_interest = 'Renta neta media por hogar' 
 n_income_deciles = 10
 
-if cfg.type_of_study == 'week':
+if cfg.type_of_study == 'month':
+    time_of_study = 'March 2022'
+elif cfg.type_of_study == 'week':
     time_of_study = 'Normal Week'
-elif cfg.type_of_study == 'weekend':
-    time_of_study = 'Normal Weekend'
 else:
     print('No correct time of study has been set. Maybe you meant week or weekend?')
 
@@ -103,10 +103,10 @@ logger.info('Opening data...')
 rent_data = gpd.read_file(cfg.INCOME_DATA / 'geometries_and_income.geojson') # rent data to add to the viajes data to find income per district
 rent_data = rent_data[['ID', 'geometry'] + cfg.INCOME_VARS_OF_INTEREST ] # here I select the variables of interest
 
-if cfg.type_of_study == 'week':
+if cfg.type_of_study == 'month':
+    file_name = 'all_viajes_month_0322.csv'
+elif cfg.type_of_study == 'week':
     file_name = 'all_viajes_week_0222.csv'
-elif cfg.type_of_study == 'weekend':
-    file_name = 'all_viajes_weekend_0222.csv'
 else:
     file_name = 'default_file.csv'  # FIXME: Fallback option if neither is True
 

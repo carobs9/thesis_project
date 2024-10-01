@@ -1,15 +1,11 @@
 import config as cfg
-import os
 import pandas as pd
-from utils import get_overview, open_gz, filter_district
 import networkx as nx
 import matplotlib.pyplot as plt
-from shapely.geometry import Polygon
 import geopandas as gpd
 import matplotlib.pyplot as plt
-from sklearn.model_selection import train_test_split
 
-all_viajes = pd.read_csv('viajes/all_viajes_week_0222.csv')
+all_viajes = pd.read_csv('viajes/all_viajes_month_0322.csv')
 gdf = gpd.read_file(cfg.ZONIFICACION_DATA / 'distritos/madrid_gdf.geojson')  # Load your GeoJSON file into a GeoDataFrame
 gdf = gdf.to_crs(epsg=3042)
 
@@ -73,3 +69,5 @@ positions = get_positions(gdf)
 G = define_graph(filtered_df, 'viajes')
 edge_colors, edge_widths = set_art(G)
 plot_graph_and_background(G, positions, edge_colors, edge_widths, 500, 'white', gdf, 0.3)
+
+nx.write_gml(G, "0322_graph.gml")

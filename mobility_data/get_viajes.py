@@ -6,8 +6,8 @@ import logging
 from utils import open_gz_by_district
 
 # Code to unzip a TAR file on Windows or Mac. NOTE: Run only once to unzip folder from MITMA
-# file = tarfile.open('VIAJES/202202_Viajes_distritos.tar') # open file, a zipped folder containing all data monthly (typically in .tar format)
-# file.extractall('VIAJES/basicos_distritos_viajes_202202') # extracting file, unzipped folder containing several files
+# file = tarfile.open('VIAJES/202203_Viajes_distritos.tar') # open file, a zipped folder containing all data monthly (typically in .tar format)
+# file.extractall('VIAJES/basicos_distritos_viajes_202203') # extracting file, unzipped folder containing several files
 # file.close()
 
 # Configure general logger
@@ -22,9 +22,10 @@ file_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelnam
 # Add the handler to the logger
 logger.addHandler(file_handler)
 
-if cfg.type_of_study == 'week': # FIXME: Adapt function to filter more districts easily
-    viajes = open_gz_by_district(cfg.VIAJES_DATA / cfg.DF_OF_INTEREST, cfg.WEEK_DAYS, district_code='28079') # substracting trips in Madrid districts during day 7 to 11 of Feb 
-elif cfg.type_of_study == 'weekend':
+
+if cfg.type_of_study == 'month': # FIXME: Adapt function to filter more districts easily
+    viajes = open_gz_by_district(cfg.VIAJES_DATA / cfg.DF_OF_INTEREST, cfg.MONTH_DAYS, district_code='28079') # substracting trips in Madrid districts during day 7 to 11 of Feb 
+elif cfg.type_of_study == 'week':
     viajes = open_gz_by_district(cfg.VIAJES_DATA / cfg.DF_OF_INTEREST, cfg.WEEKEND_DAYS, district_code='28079') # substracting trips in Madrid districts during day 5 to 6 of Feb 
 else:
     print('No time of study has been set')
@@ -32,10 +33,10 @@ else:
 logger.info(f'Extracting trips from {cfg.DF_OF_INTEREST}')
 logger.info(f'Timeframe of study: {cfg.type_of_study}')
 
-if cfg.type_of_study == 'week':
+if cfg.type_of_study == 'month':
+    logger.info(f'Days of interest: {cfg.MONTH_DAYS}')
+elif cfg.type_of_study == 'week':
     logger.info(f'Days of interest: {cfg.WEEK_DAYS}')
-elif cfg.type_of_study == 'weekend':
-    logger.info(f'Days of interest: {cfg.WEEKEND_DAYS}')
 
 
 all_viajes = pd.concat(viajes, ignore_index=True)
@@ -45,8 +46,8 @@ logger.info(f'Shape of all viajes: {all_viajes.shape}')
 
 
 if cfg.SAVE_DFS:
-    all_viajes.to_csv('viajes/all_viajes_week_0222.csv', index=False) # saving all trips for week / weekend of interest
-    logger.info(f'Figures saved to: viajes/all_viajes_week_0222.csv')
+    all_viajes.to_csv(cfg.VIAJES_DATA / 'all_viajes_month_0322.csv', index=False) # saving all trips for week / weekend of interest
+    logger.info(f'Figures saved to: viajes/all_viajes_month_0322.csv')
 
 #NOTE: The residence of the users in the MITMA data is not by district, but by province. 
 # This could be a problem as I am trying to understand how people from different districts move. 

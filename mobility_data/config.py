@@ -1,8 +1,8 @@
 from pathlib import Path
 
 # Set the root path
-ROOT_PATH = Path('C:/Users/rqg886/Desktop/THESIS_PROJECT')
-# ROOT_PATH = Path('/Users/caro/Desktop/thesis_project')
+# ROOT_PATH = Path('C:/Users/rqg886/Desktop/THESIS_PROJECT')
+ROOT_PATH = Path('/Users/caro/Desktop/thesis_project')
 FOLDER_PATH = 'mobility_data'
 
 # general folders
@@ -24,12 +24,12 @@ DATASETS_PATH = ROOT_PATH / 'datasets'
 # NOTE: These variables need to be set by the user
 # 1. Date of interest (week/weekend, specific days)
 
-type_of_study = 'week' # or 'weekend', or 'morans'
-WEEK_DAYS =  [6,7,8,9,10] # days of the month to study (normal week)
-WEEKEND_DAYS =  [4,5] # days of the month to study (normal weekend)
+type_of_study = 'week' # 'week', 'month', or 'morans'
+MONTH_DAYS =  [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30] # days of the month to study (monthly study)
+WEEK_DAYS =  [4,5] # days of the month to study (normal week)
 
 # 2. Dataframe of interest
-DF_OF_INTEREST = 'basicos_distritos_viajes_202202' # change accordningly: 'basicos_distritos_viajes_yyyymm'
+DF_OF_INTEREST = 'basicos_distritos_viajes_202203' # change accordningly: 'basicos_distritos_viajes_yyyymm'
 
 # 3. Dynamic figures folder
 
@@ -40,6 +40,3 @@ SAVE_FIGURES = True
 
 # 5. Save dataframes
 SAVE_DFS = True
-
-# 6. Selecting metropolitan area instead of just downtown for the study
-METROPOLITAN = True

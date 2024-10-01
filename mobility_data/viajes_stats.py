@@ -4,12 +4,12 @@ import pandas as pd
 import config as cfg
 
 print('Starting')
-if cfg.type_of_study == 'week':
-    all_viajes = pd.read_csv(cfg.VIAJES_DATA / 'all_viajes_week_0222.csv') # substracting trips in Madrid districts during day 7 to 11 of Feb 
+if cfg.type_of_study == 'month':
+    all_viajes = pd.read_csv(cfg.VIAJES_DATA / 'all_viajes_month_0322.csv') # substracting trips in Madrid districts during March 2022
+    data_name = 'March 2022'
+elif cfg.type_of_study == 'week':
+    all_viajes = pd.read_csv('VIAJES/all_viajes_week_0222.csv') # substracting trips in Madrid districts during a 'normal' week
     data_name = 'Normal Week'
-elif cfg.type_of_study == 'weekend':
-    all_viajes = pd.read_csv('VIAJES/all_viajes_weekend_0222.csv') # substracting trips in Madrid districts during day 5 to 6 of Feb. NOTE: This dataframe has not been created yet
-    data_name = 'Normal Weekend'
 else:
     print('No time of study has been set')
 
