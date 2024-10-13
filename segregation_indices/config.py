@@ -37,4 +37,4 @@ INCOME_VARS_OF_INTEREST = ['Media de la renta por unidad de consumo','Mediana de
                             'Renta neta media por hogar', 'Renta neta media por persona ']
 
 # 4. Save figures
-SAVE_FIGURES = True
+SAVE_FIGURES = False

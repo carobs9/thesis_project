@@ -17,20 +17,28 @@ def get_positions(gdf):
     }
 
 # Define the graph based on DataFrame
-def define_graph(df):
+def define_graph(df, normalize_trip_count=True, remove_weak_edges=False, threshold=0.3):
     G = nx.DiGraph()
 
     # Group by origin and destination, and aggregate trip count and renta (taking the first renta value)
-    trip_counts = df.groupby(['origen', 'destino', 'sexo']).size().reset_index(name='trip_count')
-    # Normalizing trip counts to get weights between 0 and 1
-    trip_counts['normalized_trip_count'] = (trip_counts['trip_count'] - trip_counts['trip_count'].min()) / (trip_counts['trip_count'].max() - trip_counts['trip_count'].min())
-    
+    trip_counts = df.groupby(['origen', 'destino', 'renta']).size().reset_index(name='trip_count')
+
+    # Normalize trip counts to get weights between 0 and 1 if required
+    if normalize_trip_count:
+        trip_counts['weight'] = (trip_counts['trip_count'] - trip_counts['trip_count'].min()) / (trip_counts['trip_count'].max() - trip_counts['trip_count'].min())
+    else:
+        trip_counts['weight'] = trip_counts['trip_count']  # Use the raw trip count if not normalizing
+
     # NOTE: removing 'weak' edges below a threshold. This step is needed to find communities using Infomap
-    # trip_counts = trip_counts[trip_counts['normalized_trip_count'] >= 0.3] # a threshold of 0.3 is the best so far
-    # Add edges to the graph
-    for idx, row in trip_counts.iterrows(): # NOTE: CHANGE WEIGHTS IN THIS PIECE OF CODE
-        G.add_edge(row['origen'], row['destino'], weight=row['normalized_trip_count'], sexo=row['sexo'])  # Save 'renta' as edge attribute
+    if remove_weak_edges:
+        trip_counts = trip_counts[trip_counts['weight'] >= threshold]
+
+    # Add edges to the graph with 'weight' and 'renta' attributes
+    for idx, row in trip_counts.iterrows():
+        G.add_edge(row['origen'], row['destino'], weight=row['weight'], renta=row['renta'])  # NOTE: Save 'renta' as edge attribute
+
     return G, trip_counts
+
 
 # PLOTTING ---------------------------------------------------------------------------------------------------------
 
@@ -42,9 +50,9 @@ def set_art(G, weight_scale):
     # Iterate over the edges and set colors based on 'renta' attribute
     for u, v, data in G.edges(data=True):
         # Choose color based on 'renta' value (numerical or categorical)
-        if data['sexo'] == 'hombre':
+        if data['renta'] == '>15':
             edge_colors.append('blue')
-        elif data['sexo'] == 'mujer':
+        elif data['renta'] == '10-15':
             edge_colors.append('red')
         else:
             edge_colors.append('green')
@@ -54,17 +62,16 @@ def set_art(G, weight_scale):
     
     return edge_colors, edge_widths
 
-def update_node_sizes(G, income, var_of_interest):
+def update_node_sizes(G, df, var_of_interest):
     # Create a dictionary from the income DataFrame (ID -> average_income)
-    income_dict = income.set_index('ID')[var_of_interest].to_dict()
+    dictionary_with_ids = df.set_index('ID')[var_of_interest].to_dict()
 
     # Iterate over nodes and assign the 'average_income' as a node attribute (size)
     for node in G.nodes():
-        if node in income_dict:
-            G.nodes[node][var_of_interest] = income_dict[node]
+        if node in dictionary_with_ids:
+            G.nodes[node][var_of_interest] = dictionary_with_ids[node]
         else:
             G.nodes[node][var_of_interest] = 0  # Handle missing income data
-
     return G
 
 def plotly_graph(G, positions, edge_colors, edge_widths, var_of_interest, node_size_scale=0.5):
@@ -222,4 +229,5 @@ def plot_communities(G, positions, communities, edge_colors, edge_widths, var_of
 
     # Combine edge and node traces and plot
     fig = go.Figure(data=edge_traces + [node_trace], layout=layout)
-    fig.show()
+    return fig
+    #fig.show()

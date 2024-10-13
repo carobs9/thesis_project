@@ -72,7 +72,6 @@ def plot_assortativity_matrix(assortativity_matrix, name_of_figure, pearson=None
         fmt=".2f"
     )
     plt.title(title)
-    # plt.title(f'Assortativity Matrix of Trips Between Deciles\n{time_of_study}\nVariable: {var_of_interest}\nPearson:{pearson}\np-value:{p_value}')
     plt.xlabel('Destination District SES')
     plt.ylabel('Home District SES')
     if cfg.SAVE_FIGURES:
