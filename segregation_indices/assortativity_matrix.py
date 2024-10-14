@@ -24,7 +24,7 @@ logger.addHandler(file_handler)
 # SET VARIABLES -----------------------------------------------------------------
 
 # FIXME: Make more efficient, and fix variable names to plot nicely
-var_of_interest = 'Renta neta media por hogar' 
+var_of_interest = 'Average net income per person' 
 n_income_deciles = 10
 
 if cfg.type_of_study == 'month':
@@ -44,7 +44,7 @@ logger.info(f'Figures path: {cfg.FIGURES_PATH}')
 
 # FUNCTIONS -----------------------------------------------------------------------
 
-def plot_assortativity_matrix(assortativity_matrix, name_of_figure, pearson=None, p_value=None, cmap='viridis'):
+def plot_assortativity_matrix(assortativity_matrix, name_of_figure, pearson=None, p_value=None, cmap='viridis', annot=True):
     """
     Plots the assortativity matrix of trips between deciles.
     Parameters:
@@ -66,7 +66,7 @@ def plot_assortativity_matrix(assortativity_matrix, name_of_figure, pearson=None
     plt.figure(figsize=(10, 8))
     sns.heatmap(
         assortativity_matrix, 
-        annot=False, 
+        annot=annot, 
         cmap=cmap, 
         cbar_kws={'label': 'Number of Trips'}, 
         fmt=".2f"
@@ -109,19 +109,19 @@ elif cfg.type_of_study == 'week':
 else:
     file_name = 'default_file.csv'  # FIXME: Fallback option if neither is True
 
-week = pd.read_csv(cfg.MOBILITY_DATA / f'VIAJES/{file_name}') # week of interest
-week = week.loc[(week['actividad_origen'] == 'casa')] # filtering only trips from home!
+mobility = pd.read_csv(cfg.MOBILITY_DATA / f'VIAJES/{file_name}') # week of interest
+mobility = mobility.loc[(mobility['actividad_origen'] == 'casa')] # filtering only trips from home!
 
 logger.info(f"Dataframes used: {cfg.INCOME_DATA / 'geometries_and_income.geojson'} and {cfg.MOBILITY_DATA / f'VIAJES/{file_name}'}")
 logger.info('Shape of the rent dataset: %s', rent_data.shape)
-logger.info('Shape of the mobility dataset: %s', week.shape)
+logger.info('Shape of the mobility dataset: %s', mobility.shape)
 
 # MERGE INCOME AND MOBILITY DATA ----------------------------------------------------------------------
 
 logger.info('1. Merging mobility and income data')
 # 1. Adding income data per district to the mobility data, to later calculate deciles and build assortativity matrix
 viajes_with_income = pd.merge(
-    week,
+    mobility,
     rent_data,
     left_on='origen',  # The cleaned 'origen' from viajes DataFrame
     right_on='ID',  # The 'ID' from gdf
@@ -166,7 +166,7 @@ fig = px.bar(
 )
 
 if cfg.SAVE_FIGURES:
-    fig.write_html(str(cfg.FIGURES_PATH / f'{var_of_interest.lower()}_deciles_distribution_destination.html'))
+    # fig.write_html(str(cfg.FIGURES_PATH / f'{var_of_interest.lower()}_deciles_distribution_destination.html'))
     plt.savefig(cfg.FIGURES_PATH / f'{var_of_interest.lower()}_deciles_distribution_destination.png', dpi=300, bbox_inches='tight')
     logger.info(f"Plot saved at: {cfg.FIGURES_PATH / f'{var_of_interest.lower()}_deciles_distribution_destination.png'}")
 
@@ -232,7 +232,7 @@ rho_high, p_value_high = calculate_assortativity_coefficient(assortativity_matri
 
 # PLOT ASSORTATIVITY MATRICES STRATIFIED BY RENT ------------------------------------------------------------------
 
-plot_assortativity_matrix(assortativity_matrix, f'assortativity_matrix_{var_of_interest.lower()}.png')
+plot_assortativity_matrix(assortativity_matrix, f'assortativity_matrix_{var_of_interest.lower()}.png', annot=False)
 plot_assortativity_matrix(assortativity_matrix_normalized, f'normalized_assortativity_matrix_{var_of_interest.lower()}.png', rho, p_value)
 
 plot_assortativity_matrix(assortativity_matrix_middle_normalized, f'10_15_bracket_normalized_assortativity_matrix_{var_of_interest.lower()}.png', rho_middle, p_value_middle)

@@ -40,6 +40,7 @@ logger.addHandler(file_handler)
 logger.info(f'In this script, I plot income quantiles and calculate different Morans I statistics in the city of Madrid for income data from 2021.')
 logger.info(f'The variables for which income quantiles and Morans I statistics are calculared are: {cfg.INCOME_VARS_OF_INTEREST}')
 logger.info(f'Figures path: {cfg.FIGURES_PATH}')
+
 # READ DATA ------------------------------------------------------------------------------------------------------
 
 logger.info('Reading the data...')
@@ -105,6 +106,8 @@ global_moran = pd.DataFrame(
     mi_results, columns=["Variable", "Global Morans I", "P-value", "Z-Score"]
 ).set_index("Variable")
 
+global_moran = global_moran.round(3) # rounding to 2 decimal points
+
 if cfg.SAVE_FIGURES:
     global_moran.to_csv(cfg.OUTPUTS_PATH / 'global_morans_i_df.csv', index=True)
 
@@ -120,8 +123,10 @@ mi_results_local = [
 ]
 
 local_moran = pd.DataFrame(
-    mi_results_local, columns=["Variable", "Local Morans I","P-value", "Z-Score",  "Quadrant"]
+    mi_results_local, columns=["Variable", "Local Morans I","P-value", "Z-Score", "Quadrant"]
 ).set_index("Variable")
+
+local_moran = local_moran.round(3) # rounding to 2 decimal points
 
 if cfg.SAVE_FIGURES:
     local_moran.to_csv(cfg.OUTPUTS_PATH / 'local_morans_i_df.csv', index=True)

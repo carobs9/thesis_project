@@ -16,9 +16,18 @@ gdf = gdf.reset_index(drop=True) # reset the index to calculate the weights with
 
 # PAIRPLOT: CORRELATION AMONG INCOME VARIABLES -----------------------------------------------------------------------------------------------
 
-_ = sns.pairplot(
+income_correlations = sns.pairplot(
     gdf[cfg.INCOME_VARS_OF_INTEREST], kind="reg", diag_kind="kde"
 )
+
+for ax in income_correlations.axes.flatten():
+    # rotate y axis labels
+    ax.set_ylabel(ax.get_ylabel(), rotation = 0, horizontalalignment='right')
+    # rotate x axis labels
+    ax.set_xlabel(ax.get_xlabel(), rotation = 45)
+
+if cfg.SAVE_FIGURES:
+    income_correlations.savefig(cfg.FIGURES_PATH / 'income_correlations.png', dpi=300, bbox_inches='tight')
 
 # PLOTTING INCOME QUANTILES -----------------------------------------------------------------------------------------------
 
@@ -44,8 +53,6 @@ for i, col in enumerate(cfg.INCOME_VARS_OF_INTEREST):
     ax.set_axis_off()
     # Set the axis title to the name of variable being plotted
     ax.set_title(col)
-# Display the figure
-plt.show()
 
 if cfg.SAVE_FIGURES:
     f.savefig(cfg.FIGURES_PATH / 'income_quantiles.png', dpi=300, bbox_inches='tight')
