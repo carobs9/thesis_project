@@ -5,7 +5,7 @@ Thesis project to understand the role of mobility in segregation patterns in the
 
 To run a Python script with specific environment (.venv): environment_path + .py path
 
-Example: /Users/caro/Desktop/thesis_project/.venv/bin/python /Users/caro/Desktop/thesis_project/segregation_indices/morans_i.py
+Example: /Users/caro/Desktop/thesis_project/.thesis_env/bin/python /Users/caro/Desktop/thesis_project/segregation_indices/morans_i.py
 
 ## The data
 

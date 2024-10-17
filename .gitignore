@@ -22,6 +22,6 @@
 *.graphml
 # Ignore the virtual environment directories
 .venv/
-thesis_env/
+.thesis_env/
 
 

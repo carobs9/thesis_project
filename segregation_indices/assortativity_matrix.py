@@ -24,7 +24,7 @@ logger.addHandler(file_handler)
 # SET VARIABLES -----------------------------------------------------------------
 
 # FIXME: Make more efficient, and fix variable names to plot nicely
-var_of_interest = 'Average net income per person' 
+var_of_interest = 'Median income per consumption unit' 
 n_income_deciles = 10
 
 if cfg.type_of_study == 'month':
@@ -135,7 +135,12 @@ logger.info(f'Variable to calculate matrices on is set to: {var_of_interest}')
 logger.info(f'2. Calculating {n_income_deciles} income deciles for the {var_of_interest} data.')
 
 # 2. Divide data into income deciles D for each SE class - for each origin and destination, I add the income decile 
-rent_data['income_decile'] = pd.qcut(rent_data[var_of_interest], n_income_deciles, labels=False)
+if var_of_interest == 'Median income per consumption unit':
+    rent_data['income_decile'] = pd.qcut(rent_data[var_of_interest].rank(method='first'), n_income_deciles, labels=False)
+elif var_of_interest == 'Gini Index':
+    rent_data['income_decile'] = pd.qcut(rent_data[var_of_interest].rank(method='first'), n_income_deciles, labels=False) 
+else:
+    rent_data['income_decile'] = pd.qcut(rent_data[var_of_interest], n_income_deciles, labels=False)
 
 # Add deciles to dataframe
 viajes_with_income = pd.merge(viajes_with_income, rent_data[['ID', 'income_decile']], 
@@ -157,14 +162,6 @@ plt.xlabel('Income Bin')
 plt.ylabel('Number of Entries')
 plt.title(f'Distribution of Deciles for Destination of Trips\n{time_of_study}\nVariable: {var_of_interest.lower()}')
 
-# 2. plotly
-fig = px.bar(
-    x=bin_counts.index,  # The 'Income Bin' values
-    y=bin_counts.values,  # The 'Number of Entries' values
-    labels={'x': 'Income Bin', 'y': 'Number of Entries'},
-    title=f'Distribution of {var_of_interest} Deciles for Destination of Trips\n{time_of_study}'
-)
-
 if cfg.SAVE_FIGURES:
     # fig.write_html(str(cfg.FIGURES_PATH / f'{var_of_interest.lower()}_deciles_distribution_destination.html'))
     plt.savefig(cfg.FIGURES_PATH / f'{var_of_interest.lower()}_deciles_distribution_destination.png', dpi=300, bbox_inches='tight')
@@ -176,7 +173,7 @@ logger.info(f'Income deciles for {cfg.INCOME_VARS_OF_INTEREST} saved!')
 
 logger.info('Building assortativity matrices...')
 
-# Group by origin and destination deciles and count the trips
+# Group by origin and destination deciles and count the trips. FIXME: Change here to focus on purpose of the trip instead of renta
 trip_counts_by_decile = viajes_with_income.groupby(['renta', 'income_decile', 'income_decile_dest']).size().reset_index(name='trip_count')
 districts = rent_data['ID'].unique()
 

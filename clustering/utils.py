@@ -6,61 +6,60 @@ from shapely.geometry import Polygon
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 import plotly.graph_objects as go
+import numpy as np
+
+# DEFINING LABELS OF NODES 
+district_mapping = pd.read_csv('/Users/caro/Desktop/thesis_project/data_overview/processed/districts_and_population.csv')
+id_to_name = district_mapping.set_index('ID')['name_2'].to_dict()
 
 # DEFINING GRAPH --------------------------------------------------------------------------------------------------------- 
 
 # Function to generate node positions based on GeoDataFrame
 def get_positions(gdf):
     return {
-        int(row['ID']): (row['geometry'].centroid.x, row['geometry'].centroid.y)
+        int(row['ID']): (row['geometry'].centroid.x, row['geometry'].centroid.y) 
         for idx, row in gdf.iterrows()
     }
 
 # Define the graph based on DataFrame
-def define_graph(df, normalize_trip_count=True, remove_weak_edges=False, threshold=0.3):
+def define_graph(df, remove_weak_edges=False, threshold=0.1):
     G = nx.DiGraph()
 
-    # Group by origin and destination, and aggregate trip count and renta (taking the first renta value)
-    trip_counts = df.groupby(['origen', 'destino', 'renta']).size().reset_index(name='trip_count')
+    # Group by origin, destination, and renta, and aggregate trip count and renta
+    trip_counts = df.groupby(['origen', 'destino']).size().reset_index(name='trip_count')
 
-    # Normalize trip counts to get weights between 0 and 1 if required
-    if normalize_trip_count:
-        trip_counts['weight'] = (trip_counts['trip_count'] - trip_counts['trip_count'].min()) / (trip_counts['trip_count'].max() - trip_counts['trip_count'].min())
-    else:
-        trip_counts['weight'] = trip_counts['trip_count']  # Use the raw trip count if not normalizing
+    # Normalizing trip counts to get weights between 0 and 1
+    trip_counts['normalized_trip_count'] = (trip_counts['trip_count'] - trip_counts['trip_count'].min()) / (trip_counts['trip_count'].max() - trip_counts['trip_count'].min())
 
-    # NOTE: removing 'weak' edges below a threshold. This step is needed to find communities using Infomap
+    # Option to remove weak edges below a threshold
     if remove_weak_edges:
-        trip_counts = trip_counts[trip_counts['weight'] >= threshold]
+        trip_counts = trip_counts[trip_counts['normalized_trip_count'] >= threshold]
 
-    # Add edges to the graph with 'weight' and 'renta' attributes
+    # Add edges to the graph with correct attributes
     for idx, row in trip_counts.iterrows():
-        G.add_edge(row['origen'], row['destino'], weight=row['weight'], renta=row['renta'])  # NOTE: Save 'renta' as edge attribute
-
+        G.add_edge(
+            row['origen'], 
+            row['destino'], 
+            weight=row['normalized_trip_count'], 
+        )
+    
     return G, trip_counts
+
 
 
 # PLOTTING ---------------------------------------------------------------------------------------------------------
 
-# Set edge attributes like color and width for visualization
+# Set edge attributes like color and width for visualization. NOTE: Color has been removed for ease of analysis
 def set_art(G, weight_scale):
-    edge_colors = []
     edge_widths = []
     
-    # Iterate over the edges and set colors based on 'renta' attribute
+    # Iterate over the edges and set widths based on the 'weight' attribute
     for u, v, data in G.edges(data=True):
-        # Choose color based on 'renta' value (numerical or categorical)
-        if data['renta'] == '>15':
-            edge_colors.append('blue')
-        elif data['renta'] == '10-15':
-            edge_colors.append('red')
-        else:
-            edge_colors.append('green')
-
-        # Adjust edge width based on the weight (i.e., trip count)
-        edge_widths.append(max(0.5, data['weight'] / weight_scale))
+        # Scale the weight to get appropriate edge widths
+        width = data['weight'] / weight_scale
+        edge_widths.append(max(0.5, width))  # Ensuring a minimum width of 0.5
     
-    return edge_colors, edge_widths
+    return edge_widths
 
 def update_node_sizes(G, df, var_of_interest):
     # Create a dictionary from the income DataFrame (ID -> average_income)
@@ -74,53 +73,76 @@ def update_node_sizes(G, df, var_of_interest):
             G.nodes[node][var_of_interest] = 0  # Handle missing income data
     return G
 
-def plotly_graph(G, positions, edge_colors, edge_widths, var_of_interest, node_size_scale=0.5):
+def plotly_graph(G, positions, edge_widths, var_of_interest, node_size_scale=0.5):
     # Extract node positions
     node_x = [positions[node][0] for node in G.nodes()]
     node_y = [positions[node][1] for node in G.nodes()]
 
+    # Extract node sizes (scaled by the provided scale)
     node_sizes = [G.nodes[node].get(var_of_interest, 0) for node in G.nodes()]
     scaled_node_sizes = [size * node_size_scale for size in node_sizes]
 
-    # Create node scatter trace
+    # Create the node scatter trace
     node_trace = go.Scatter(
         x=node_x, y=node_y,
         mode='markers',
         marker=dict(size=scaled_node_sizes, color='white', line=dict(width=2, color='#888')),
-        text=[f'Node {node}' for node in G.nodes()],
-        hoverinfo='text'
+        text=[f'District: {id_to_name.get(node, "Unknown")}' for node in G.nodes()],
+        hoverinfo='text',
+        showlegend=False 
     )
 
-    # Prepare edges in batches based on edge color (blue, red, green)
+    # Prepare edge traces
     edge_traces = []
-    for edge_color in ['blue', 'green', 'red']:
-        edge_x, edge_y = [], []
-        for i, (u, v, data) in enumerate(G.edges(data=True)):
-            if edge_colors[i] == edge_color:
-                x0, y0 = positions[u]
-                x1, y1 = positions[v]
-                edge_x.extend([x0, x1, None])
-                edge_y.extend([y0, y1, None])
+    cmap = plt.cm.get_cmap('RdYlBu_r')
+    edge_weights = [data['weight'] for _, _, data in G.edges(data=True)]
 
-        # Create edge trace for each color
+    # Normalize weights between 0 and 1
+    weights_normalized = np.array(edge_weights)
+
+    for i, (u, v, data) in enumerate(G.edges(data=True)):
+        edge_x, edge_y = [], []
+        x0, y0 = positions[u]
+        x1, y1 = positions[v]
+        edge_x.extend([x0, x1, None])
+        edge_y.extend([y0, y1, None])
+
+        color = cmap(data['weight'])  # Get color from colormap based on the normalized weight
+        color = f'rgba({color[0]*255}, {color[1]*255}, {color[2]*255}, {color[3]})'
+
+        # Create a single edge trace with the specified color and individual width
         edge_traces.append(
             go.Scatter(
                 x=edge_x, y=edge_y,
-                line=dict(width=edge_widths[i], color=edge_color),
-                hoverinfo='none',
-                mode='lines'
+                line=dict(width=edge_widths[i], color=color),
+                text=f"Width: {edge_widths[i]:.2f}", 
+                hoverinfo='text',
+                mode='lines',
+                showlegend=False 
             )
         )
 
-    # Create a layout for the graph
+        # Create a scatter trace that adds the colorbar (color scale) for edges
+    colorbar_trace = go.Scatter(
+        x=[None], y=[None],  # Invisible points
+        mode='markers',
+        marker=dict(
+            colorscale='RdYlBu_r',  # Matching the colormap
+            cmin=min(weights_normalized),  # Min of weights
+            cmax=max(weights_normalized),  # Max of weights
+            colorbar=dict(
+                title="Edge Weight",  # Title for colorbar
+                tickvals=np.linspace(min(weights_normalized), max(weights_normalized), 5),  # Ticks on colorbar
+                ticktext=[f"{v:.2f}" for v in np.linspace(min(weights_normalized), max(weights_normalized), 5)],  # Text for ticks
+            ),
+            showscale=True  # Show colorbar
+        ),
+        hoverinfo='none'
+    )
+
+    # Create layout for the graph
     layout = go.Layout(
         showlegend=True,
-        legend=dict(
-            x=1,  
-            y=0,  
-            xanchor='right',  
-            yanchor='bottom', 
-        ),
         hovermode='closest',
         margin=dict(b=0, l=0, r=0, t=0),
         xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
@@ -128,8 +150,10 @@ def plotly_graph(G, positions, edge_colors, edge_widths, var_of_interest, node_s
     )
 
     # Combine edge and node traces
-    fig = go.Figure(data=edge_traces + [node_trace], layout=layout)
+    fig = go.Figure(data=edge_traces + [node_trace, colorbar_trace], layout=layout)
     fig.show()
+
+
 
 # ANALYSIS ---------------------------------------------------------------------------------------------------------
 
@@ -165,7 +189,7 @@ def get_adj_matrix(G):
 
 # PLOT COMMUNITIES ---------------------------------------------------------------------------------------------------
 
-def plot_communities(G, positions, communities, edge_colors, edge_widths, var_of_interest, node_size_scale=0.5):
+def plot_communities(G, positions, communities, edge_widths, var_of_interest, edge_color="#888", node_size_scale=0.5):
     # Get a list of unique colors for each community using matplotlib
     colors = list(mcolors.CSS4_COLORS.keys())[:len(communities)]
 
@@ -194,15 +218,14 @@ def plot_communities(G, positions, communities, edge_colors, edge_widths, var_of
 
     # Prepare edges
     edge_traces = []
-    for edge_color in ['blue', 'green', 'red']:
+    for i, (u, v, data) in enumerate(G.edges(data=True)):
         edge_x, edge_y = [], []
-        for i, (u, v, data) in enumerate(G.edges(data=True)):
-            if edge_colors[i] == edge_color:
-                x0, y0 = positions[u]
-                x1, y1 = positions[v]
-                edge_x.extend([x0, x1, None])
-                edge_y.extend([y0, y1, None])
+        x0, y0 = positions[u]
+        x1, y1 = positions[v]
+        edge_x.extend([x0, x1, None])
+        edge_y.extend([y0, y1, None])
 
+        # Create a single edge trace with the specified color and individual width
         edge_traces.append(
             go.Scatter(
                 x=edge_x, y=edge_y,
@@ -211,7 +234,6 @@ def plot_communities(G, positions, communities, edge_colors, edge_widths, var_of
                 mode='lines'
             )
         )
-
     # Create a layout for the graph
     layout = go.Layout(
         showlegend=True,
