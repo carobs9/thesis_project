@@ -24,7 +24,7 @@ logger.addHandler(file_handler)
 # SET VARIABLES -----------------------------------------------------------------
 
 # FIXME: Make more efficient, and fix variable names to plot nicely
-var_of_interest = 'Median income per consumption unit' 
+var_of_interest = 'Gini Index' 
 n_income_deciles = 10
 
 if cfg.type_of_study == 'month':

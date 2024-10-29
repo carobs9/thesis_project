@@ -9,7 +9,7 @@ import plotly.graph_objects as go
 import numpy as np
 
 # DEFINING LABELS OF NODES 
-district_mapping = pd.read_csv('/Users/caro/Desktop/thesis_project/data_overview/processed/districts_and_population.csv')
+district_mapping = pd.read_csv('/Users/caro/Desktop/thesis_project/data_overview/outputs/districts_and_population.csv')
 id_to_name = district_mapping.set_index('ID')['name_2'].to_dict()
 
 # DEFINING GRAPH --------------------------------------------------------------------------------------------------------- 
@@ -73,7 +73,7 @@ def update_node_sizes(G, df, var_of_interest):
             G.nodes[node][var_of_interest] = 0  # Handle missing income data
     return G
 
-def plotly_graph(G, positions, edge_widths, var_of_interest, node_size_scale=0.5):
+def plotly_graph(G, positions, edge_widths, var_of_interest, node_size_scale=0.05):
     # Extract node positions
     node_x = [positions[node][0] for node in G.nodes()]
     node_y = [positions[node][1] for node in G.nodes()]
@@ -189,7 +189,7 @@ def get_adj_matrix(G):
 
 # PLOT COMMUNITIES ---------------------------------------------------------------------------------------------------
 
-def plot_communities(G, positions, communities, edge_widths, var_of_interest, edge_color="#888", node_size_scale=0.5):
+def plot_communities(G, positions, communities, edge_widths, var_of_interest, edge_color="#888", node_size_scale=0.05):
     # Get a list of unique colors for each community using matplotlib
     colors = list(mcolors.CSS4_COLORS.keys())[:len(communities)]
 
