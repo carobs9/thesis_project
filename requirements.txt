@@ -1,6 +1,7 @@
 pandas
 geopandas
 numpy
+statsmodels
 # segregation measures
 libpysal
 esda
@@ -17,3 +18,4 @@ nbformat>=4.2.0
 dash
 dash_cytoscape
 pyproj
+Fiona
