@@ -33,6 +33,7 @@ FIGURES_PATH = FIGURES_PATH / type_of_study
 
 # 3. Variables of interest
 INCOME_VARS_OF_INTEREST = [
+    'Gini Index',
     'Average income per consumption unit',
     'Median income per consumption unit',
     'Average gross income per household',

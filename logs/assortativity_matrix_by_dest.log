@@ -1,0 +1,105 @@
+2024-10-29 15:25:03,944 - my_logger - INFO - I calculate 10 income deciles for different income data in the city of Madrid
+2024-10-29 15:25:03,944 - my_logger - INFO - Timeframe: March 2022
+2024-10-29 15:25:03,944 - my_logger - INFO - I build assortativity matrices for the Gini Index
+2024-10-29 15:25:03,944 - my_logger - INFO - The variables for which income deciles are calculared are: ['Gini Index', 'Average income per consumption unit', 'Median income per consumption unit', 'Average gross income per household', 'Average gross income per person', 'Average net income per household', 'Average net income per person']
+2024-10-29 15:25:03,944 - my_logger - INFO - Save figures = True
+2024-10-29 15:25:03,944 - my_logger - INFO - Figures path: /Users/caro/Desktop/thesis_project/segregation_indices/figures/month
+2024-10-29 15:25:03,944 - my_logger - INFO - Opening data...
+2024-10-29 15:25:26,414 - my_logger - INFO - I calculate 10 income deciles for different income data in the city of Madrid
+2024-10-29 15:25:26,414 - my_logger - INFO - Timeframe: March 2022
+2024-10-29 15:25:26,414 - my_logger - INFO - I build assortativity matrices for the Gini Index
+2024-10-29 15:25:26,414 - my_logger - INFO - The variables for which income deciles are calculared are: ['Gini Index', 'Average income per consumption unit', 'Median income per consumption unit', 'Average gross income per household', 'Average gross income per person', 'Average net income per household', 'Average net income per person']
+2024-10-29 15:25:26,414 - my_logger - INFO - Save figures = True
+2024-10-29 15:25:26,414 - my_logger - INFO - Figures path: /Users/caro/Desktop/thesis_project/segregation_indices/figures/month
+2024-10-29 15:25:26,414 - my_logger - INFO - Opening data...
+2024-10-29 15:26:09,870 - my_logger - INFO - Dataframes used: /Users/caro/Desktop/thesis_project/segregation_indices/data/processed/geometries_and_income.geojson and /Users/caro/Desktop/thesis_project/mobility_data/VIAJES/all_viajes_month_0322.csv
+2024-10-29 15:26:09,872 - my_logger - INFO - Shape of the rent dataset: (21, 9)
+2024-10-29 15:26:09,873 - my_logger - INFO - Shape of the mobility dataset: (0, 15)
+2024-10-29 15:26:09,873 - my_logger - INFO - 1. Merging mobility and income data
+2024-10-29 15:26:09,879 - my_logger - INFO - Variable to calculate matrices on is set to: Gini Index
+2024-10-29 15:26:09,879 - my_logger - INFO - 2. Calculating 10 income deciles for the Gini Index data.
+2024-10-29 15:26:09,886 - my_logger - INFO - Plotting income deciles
+2024-10-29 15:27:36,575 - my_logger - INFO - I calculate 10 income deciles for different income data in the city of Madrid
+2024-10-29 15:27:36,576 - my_logger - INFO - Timeframe: March 2022
+2024-10-29 15:27:36,576 - my_logger - INFO - I build assortativity matrices for the Gini Index
+2024-10-29 15:27:36,576 - my_logger - INFO - The variables for which income deciles are calculared are: ['Gini Index', 'Average income per consumption unit', 'Median income per consumption unit', 'Average gross income per household', 'Average gross income per person', 'Average net income per household', 'Average net income per person']
+2024-10-29 15:27:36,576 - my_logger - INFO - Save figures = True
+2024-10-29 15:27:36,576 - my_logger - INFO - Figures path: /Users/caro/Desktop/thesis_project/segregation_indices/figures/month
+2024-10-29 15:27:36,576 - my_logger - INFO - Opening data...
+2024-10-29 15:27:55,698 - my_logger - INFO - Dataframes used: /Users/caro/Desktop/thesis_project/segregation_indices/data/processed/geometries_and_income.geojson and /Users/caro/Desktop/thesis_project/mobility_data/VIAJES/all_viajes_month_0322.csv
+2024-10-29 15:27:55,699 - my_logger - INFO - Shape of the rent dataset: (21, 9)
+2024-10-29 15:27:55,700 - my_logger - INFO - Shape of the mobility dataset: (0, 15)
+2024-10-29 15:27:55,700 - my_logger - INFO - 1. Merging mobility and income data
+2024-10-29 15:27:55,703 - my_logger - INFO - Variable to calculate matrices on is set to: Gini Index
+2024-10-29 15:27:55,704 - my_logger - INFO - 2. Calculating 10 income deciles for the Gini Index data.
+2024-10-29 15:27:55,707 - my_logger - INFO - Plotting income deciles
+2024-10-29 15:27:55,707 - my_logger - INFO - Building assortativity matrices...
+2024-10-29 15:27:55,714 - my_logger - INFO - Assortativity matrix created successfully!
+2024-10-29 15:27:55,714 - my_logger - INFO - Assortativity matrix normalized successfully!
+2024-10-29 15:27:55,715 - my_logger - INFO - Stratifying mobility data by rent...
+2024-10-29 15:27:55,715 - my_logger - DEBUG - Put more thought into this, and review
+2024-10-29 15:28:36,088 - my_logger - INFO - I calculate 10 income deciles for different income data in the city of Madrid
+2024-10-29 15:28:36,089 - my_logger - INFO - Timeframe: March 2022
+2024-10-29 15:28:36,089 - my_logger - INFO - I build assortativity matrices for the Gini Index
+2024-10-29 15:28:36,089 - my_logger - INFO - The variables for which income deciles are calculared are: ['Gini Index', 'Average income per consumption unit', 'Median income per consumption unit', 'Average gross income per household', 'Average gross income per person', 'Average net income per household', 'Average net income per person']
+2024-10-29 15:28:36,089 - my_logger - INFO - Save figures = True
+2024-10-29 15:28:36,089 - my_logger - INFO - Figures path: /Users/caro/Desktop/thesis_project/segregation_indices/figures/month
+2024-10-29 15:28:36,089 - my_logger - INFO - Opening data...
+2024-10-29 15:28:55,076 - my_logger - INFO - Dataframes used: /Users/caro/Desktop/thesis_project/segregation_indices/data/processed/geometries_and_income.geojson and /Users/caro/Desktop/thesis_project/mobility_data/VIAJES/all_viajes_month_0322.csv
+2024-10-29 15:28:55,077 - my_logger - INFO - Shape of the rent dataset: (21, 9)
+2024-10-29 15:28:55,078 - my_logger - INFO - Shape of the mobility dataset: (0, 15)
+2024-10-29 15:28:55,078 - my_logger - INFO - 1. Merging mobility and income data
+2024-10-29 15:28:55,086 - my_logger - INFO - Variable to calculate matrices on is set to: Gini Index
+2024-10-29 15:28:55,086 - my_logger - INFO - 2. Calculating 10 income deciles for the Gini Index data.
+2024-10-29 15:28:55,090 - my_logger - INFO - Plotting income deciles
+2024-10-29 15:28:55,090 - my_logger - INFO - Building assortativity matrices...
+2024-10-29 15:28:55,094 - my_logger - INFO - Assortativity matrix created successfully!
+2024-10-29 15:28:55,094 - my_logger - INFO - Assortativity matrix normalized successfully!
+2024-10-29 15:28:55,095 - my_logger - INFO - Stratifying mobility data by rent...
+2024-10-29 15:28:55,095 - my_logger - DEBUG - Put more thought into this, and review
+2024-10-29 15:29:01,155 - my_logger - INFO - I calculate 10 income deciles for different income data in the city of Madrid
+2024-10-29 15:29:01,155 - my_logger - INFO - Timeframe: March 2022
+2024-10-29 15:29:01,155 - my_logger - INFO - I build assortativity matrices for the Gini Index
+2024-10-29 15:29:01,155 - my_logger - INFO - The variables for which income deciles are calculared are: ['Gini Index', 'Average income per consumption unit', 'Median income per consumption unit', 'Average gross income per household', 'Average gross income per person', 'Average net income per household', 'Average net income per person']
+2024-10-29 15:29:01,155 - my_logger - INFO - Save figures = True
+2024-10-29 15:29:01,155 - my_logger - INFO - Figures path: /Users/caro/Desktop/thesis_project/segregation_indices/figures/month
+2024-10-29 15:29:01,155 - my_logger - INFO - Opening data...
+2024-10-29 15:29:19,275 - my_logger - INFO - Dataframes used: /Users/caro/Desktop/thesis_project/segregation_indices/data/processed/geometries_and_income.geojson and /Users/caro/Desktop/thesis_project/mobility_data/VIAJES/all_viajes_month_0322.csv
+2024-10-29 15:29:19,276 - my_logger - INFO - Shape of the rent dataset: (21, 9)
+2024-10-29 15:29:19,277 - my_logger - INFO - Shape of the mobility dataset: (1205740, 15)
+2024-10-29 15:29:19,277 - my_logger - INFO - 1. Merging mobility and income data
+2024-10-29 15:29:19,508 - my_logger - INFO - Variable to calculate matrices on is set to: Gini Index
+2024-10-29 15:29:19,508 - my_logger - INFO - 2. Calculating 10 income deciles for the Gini Index data.
+2024-10-29 15:29:19,970 - my_logger - INFO - Plotting income deciles
+2024-10-29 15:29:19,970 - my_logger - INFO - Building assortativity matrices...
+2024-10-29 15:29:20,029 - my_logger - DEBUG - Encountered an error with pivot(): Index contains duplicate entries, cannot reshape
+2024-10-29 15:29:20,029 - my_logger - DEBUG - Switching to pivot_table() to handle duplicates.
+2024-10-29 15:29:20,034 - my_logger - INFO - Assortativity matrix created successfully!
+2024-10-29 15:29:20,034 - my_logger - INFO - Assortativity matrix normalized successfully!
+2024-10-29 15:29:20,036 - my_logger - INFO - Stratifying mobility data by rent...
+2024-10-29 15:29:20,036 - my_logger - DEBUG - Put more thought into this, and review
+2024-10-29 15:29:39,956 - my_logger - INFO - All assortativity matrices figures for Gini Index saved successfully!
+2024-10-29 15:31:18,339 - my_logger - INFO - I calculate 10 income deciles for different income data in the city of Madrid
+2024-10-29 15:31:18,339 - my_logger - INFO - Timeframe: March 2022
+2024-10-29 15:31:18,339 - my_logger - INFO - I build assortativity matrices for the Gini Index
+2024-10-29 15:31:18,339 - my_logger - INFO - The variables for which income deciles are calculared are: ['Gini Index', 'Average income per consumption unit', 'Median income per consumption unit', 'Average gross income per household', 'Average gross income per person', 'Average net income per household', 'Average net income per person']
+2024-10-29 15:31:18,339 - my_logger - INFO - Save figures = True
+2024-10-29 15:31:18,339 - my_logger - INFO - Figures path: /Users/caro/Desktop/thesis_project/segregation_indices/figures/month
+2024-10-29 15:31:18,339 - my_logger - INFO - Opening data...
+2024-10-29 15:31:37,178 - my_logger - INFO - Dataframes used: /Users/caro/Desktop/thesis_project/segregation_indices/data/processed/geometries_and_income.geojson and /Users/caro/Desktop/thesis_project/mobility_data/VIAJES/all_viajes_month_0322.csv
+2024-10-29 15:31:37,179 - my_logger - INFO - Shape of the rent dataset: (21, 9)
+2024-10-29 15:31:37,180 - my_logger - INFO - Shape of the mobility dataset: (1205740, 15)
+2024-10-29 15:31:37,180 - my_logger - INFO - 1. Merging mobility and income data
+2024-10-29 15:31:37,429 - my_logger - INFO - Variable to calculate matrices on is set to: Gini Index
+2024-10-29 15:31:37,429 - my_logger - INFO - 2. Calculating 10 income deciles for the Gini Index data.
+2024-10-29 15:31:37,891 - my_logger - INFO - Plotting income deciles
+2024-10-29 15:31:38,178 - my_logger - INFO - Plot saved at: /Users/caro/Desktop/thesis_project/segregation_indices/figures/month/gini index_work_dest_deciles_distribution_destination.png
+2024-10-29 15:31:38,178 - my_logger - INFO - Income deciles for ['Gini Index', 'Average income per consumption unit', 'Median income per consumption unit', 'Average gross income per household', 'Average gross income per person', 'Average net income per household', 'Average net income per person'] saved!
+2024-10-29 15:31:38,178 - my_logger - INFO - Building assortativity matrices...
+2024-10-29 15:31:38,230 - my_logger - DEBUG - Encountered an error with pivot(): Index contains duplicate entries, cannot reshape
+2024-10-29 15:31:38,230 - my_logger - DEBUG - Switching to pivot_table() to handle duplicates.
+2024-10-29 15:31:38,234 - my_logger - INFO - Assortativity matrix created successfully!
+2024-10-29 15:31:38,234 - my_logger - INFO - Assortativity matrix normalized successfully!
+2024-10-29 15:31:38,235 - my_logger - INFO - Stratifying mobility data by rent...
+2024-10-29 15:31:38,235 - my_logger - DEBUG - Put more thought into this, and review
+2024-10-29 15:34:29,320 - my_logger - INFO - All assortativity matrices figures for Gini Index saved successfully!

@@ -65,7 +65,7 @@ def update_node_sizes(G, df, var_of_interest):
     # Create a dictionary from the income DataFrame (ID -> average_income)
     dictionary_with_ids = df.set_index('ID')[var_of_interest].to_dict()
 
-    # Iterate over nodes and assign the 'average_income' as a node attribute (size)
+    # Iterate over nodes and assign the income as a node attribute (size)
     for node in G.nodes():
         if node in dictionary_with_ids:
             G.nodes[node][var_of_interest] = dictionary_with_ids[node]
@@ -154,13 +154,12 @@ def plotly_graph(G, positions, edge_widths, var_of_interest, node_size_scale=0.0
     fig.show()
 
 
-
 # ANALYSIS ---------------------------------------------------------------------------------------------------------
 
 def check_in_weights(G):
     in_weights = {}
     for node in G.nodes():
-        total_in_weight = sum(data['weight'] for u, v, data in G.in_edges(node, data=True))
+        total_in_weight = round(sum(data['weight'] for u, v, data in G.in_edges(node, data=True)), 2)
         in_weights[node] = total_in_weight
         print(f"Node {node} Total In-weight: {total_in_weight}")
     return in_weights
@@ -168,7 +167,7 @@ def check_in_weights(G):
 def check_out_weights(G):
     out_weights = {}
     for node in G.nodes():
-        total_out_weight = sum(data['weight'] for u, v, data in G.out_edges(node, data=True))
+        total_out_weight = round(sum(data['weight'] for u, v, data in G.out_edges(node, data=True)), 2)
         out_weights[node] = total_out_weight
         print(f"Node {node} Total Out-weight: {total_out_weight}")
     return out_weights
@@ -253,3 +252,57 @@ def plot_communities(G, positions, communities, edge_widths, var_of_interest, ed
     fig = go.Figure(data=edge_traces + [node_trace], layout=layout)
     return fig
     #fig.show()
+
+# TRIP ANALYSIS --------------------------------------------------------------------------------------------------- 
+
+def build_trip_count(df, sociodemographic_var):
+    trip_counts = df.groupby(['origen', 'destino', sociodemographic_var]).size().reset_index(name='trip_count')
+    return trip_counts
+
+def get_district_names(trip_counts):
+    # get names of districts
+    trip_counts = trip_counts.merge(district_mapping[['ID', 'name_2']], how='left', left_on='origen', right_on='ID')
+    trip_counts = trip_counts.rename(columns={'name_2': 'origin'})
+    trip_counts = trip_counts.merge(district_mapping[['ID', 'name_2']], how='left', left_on='destino', right_on='ID')
+    trip_counts = trip_counts.rename(columns={'name_2': 'destination'})
+
+    # drop extra columns
+    trip_counts = trip_counts.drop(columns=['ID_x', 'ID_y'])
+
+    return trip_counts
+
+def get_income_data(trip_counts, income, income_var_1, income_var_2):
+    # get origin incomes
+    trip_counts = trip_counts.merge(
+    income[['ID', income_var_1, income_var_2]], 
+    left_on='origen', 
+    right_on='ID', 
+    how='left'
+)
+    # rename
+    trip_counts.rename(columns={income_var_1: f'Origin {income_var_1}'}, inplace=True)
+    trip_counts.rename(columns={income_var_2: f'Origin {income_var_2}'}, inplace=True)
+
+    # drop extra columns
+    trip_counts.drop(columns=['ID'], inplace=True)
+
+    # get destination incomes
+    trip_counts = trip_counts.merge(
+        income[['ID', income_var_1, income_var_2]], 
+        left_on='destino', 
+        right_on='ID', 
+        how='left'
+    )
+
+    # rename columns
+    trip_counts.rename(columns={income_var_1: f'Destination {income_var_1}'}, inplace=True)
+    trip_counts.rename(columns={income_var_2: f'Destination {income_var_2}'}, inplace=True)
+    # drop extra columns
+    trip_counts.drop(columns=['ID', 'origen', 'destino'], inplace=True)
+
+    return trip_counts
+
+def add_quantiles(trip_counts, income_var, n_quantiles=6):
+    trip_counts[f'income decile origin {income_var}'] = pd.qcut(trip_counts[f'Origin {income_var}'], n_quantiles, labels=False, duplicates='drop')
+    trip_counts[f'income decile destination {income_var}'] = pd.qcut(trip_counts[f'Destination {income_var}'], n_quantiles, labels=False, duplicates='drop') 
+    return trip_counts
