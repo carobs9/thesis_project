@@ -47,6 +47,7 @@ logger.info('Reading the data...')
 merged = gpd.read_file(cfg.INCOME_DATA / 'geometries_and_income.geojson') # TODO: Fix path
 gdf = merged[['ID', 'geometry'] + cfg.INCOME_VARS_OF_INTEREST] # here I select the variable of interest
 gdf = gdf.reset_index(drop=True) # reset the index to calculate the weights with no problems
+district_mapping = pd.read_csv('/Users/caro/Desktop/thesis_project/data_overview/outputs/districts_and_population.csv')
 
 
 # CALCULATE WEIGHTS ---------------------------------------------------------------------------------------------
@@ -195,21 +196,42 @@ for var in cfg.INCOME_VARS_OF_INTEREST:
     gdf[f"mean_{var}_lag_std"] = lag_spatial( # calculate lag for each var. of interest
         w, gdf[f"mean_{var}_std"]
     )
+    # Normalize by standard deviation to get deviations in terms of standard deviations
+    gdf[f"mean_{var}_z"] = gdf[f"mean_{var}_std"] / gdf[f"mean_{var}_std"].std()
+    gdf[f"mean_{var}_lag_z"] = gdf[f"mean_{var}_lag_std"] / gdf[f"mean_{var}_lag_std"].std()
 
-labels = gdf['ID'] # set labels = Madrid districts' IDs 
+labels = district_mapping.set_index('ID')['name_2'].to_dict()
+gdf['label'] = gdf['ID'].map(labels)
 
 for var in cfg.INCOME_VARS_OF_INTEREST:
     f, ax = plt.subplots(1, figsize=(6, 6))
     sns.regplot(
-        x=f"mean_{var}_std",
-        y=f"mean_{var}_lag_std",
+        x=f"mean_{var}_z",
+        y=f"mean_{var}_lag_z",
         ci=None,
         data=gdf,
         line_kws={"color": "r"},
     )
 
-    for i, txt in enumerate(labels):
-        ax.annotate(txt, (gdf[f"mean_{var}_std"].iloc[i], gdf[f"mean_{var}_lag_std"].iloc[i]), fontsize=9, ha='right')
+    for i, txt in gdf['label'].items():
+        ax.annotate(txt, (gdf[f"mean_{var}_z"].iloc[i], gdf[f"mean_{var}_lag_z"].iloc[i]), fontsize=9, ha='right')
+        
+    ax.axvline(0, c="k", alpha=0.5)
+    ax.axhline(0, c="k", alpha=0.5)
+    ax.set_title(f"Moran Plot - {var}")
+
+    if cfg.SAVE_FIGURES:
+        plt.savefig(cfg.FIGURES_PATH / f'labeled_moran_plot_{var.replace(" ", "_").lower()}.png', dpi=300, bbox_inches='tight')
+
+for var in cfg.INCOME_VARS_OF_INTEREST:
+    f, ax = plt.subplots(1, figsize=(6, 6))
+    sns.regplot(
+        x=f"mean_{var}_z",
+        y=f"mean_{var}_lag_z",
+        ci=None,
+        data=gdf,
+        line_kws={"color": "r"},
+    )
         
     ax.axvline(0, c="k", alpha=0.5)
     ax.axhline(0, c="k", alpha=0.5)
