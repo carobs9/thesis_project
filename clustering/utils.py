@@ -155,79 +155,6 @@ def plotly_graph(G, positions, edge_widths, var_of_interest, node_size_scale=0.0
     fig = go.Figure(data=edge_traces + [node_trace, colorbar_trace], layout=layout)
     return fig
 
-def plotly_graph_with_arrows(G, positions, edge_widths, var_of_interest, node_size_scale=0.05):
-    # Extract node positions
-    node_x = [positions[node][0] for node in G.nodes()]
-    node_y = [positions[node][1] for node in G.nodes()]
-
-    # Extract node sizes (scaled by the provided scale)
-    node_sizes = [G.nodes[node].get(var_of_interest, 0) for node in G.nodes()]
-    scaled_node_sizes = [size * node_size_scale for size in node_sizes]
-
-    # Create the node scatter trace
-    node_trace = go.Scatter(
-        x=node_x, y=node_y,
-        mode='markers',
-        marker=dict(size=scaled_node_sizes, color='white', line=dict(width=2, color='#888')),
-        text=[f'District: {id_to_name.get(node, "Unknown")}' for node in G.nodes()],
-        hoverinfo='text',
-        showlegend=False 
-    )
-
-    # Prepare edge traces and arrow annotations
-    edge_traces = []
-    annotations = []
-    cmap = plt.colormaps['RdYlBu_r'] 
-
-    for i, (u, v, data) in enumerate(G.edges(data=True)):
-        # Coordinates for start and end of the edge
-        x0, y0 = positions[u]
-        x1, y1 = positions[v]
-
-        # Determine edge color based on normalized weight
-        color = f'rgba({cmap(data["weight"])[0] * 255}, {cmap(data["weight"])[1] * 255}, {cmap(data["weight"])[2] * 255}, {cmap(data["weight"])[3]})'
-
-        # Create the edge trace
-        edge_traces.append(
-            go.Scatter(
-                x=[x0, x1, None],
-                y=[y0, y1, None],
-                line=dict(width=edge_widths[i], color=color),
-                mode='lines',
-                showlegend=False,
-                hoverinfo='none'
-            )
-        )
-
-        # Calculate center-point for the arrow
-        arrow_x = (x0 + x1) / 2
-        arrow_y = (y0 + y1) / 2
-
-        # Add an arrow annotation at the midpoint with a larger arrowhead
-        annotations.append(
-            dict(
-                x=arrow_x, y=arrow_y,
-                ax=x0, ay=y0,
-                xref='x', yref='y', axref='x', ayref='y',
-                arrowhead=8, arrowsize=2, arrowwidth=1.5, arrowcolor=color
-            )
-        )
-
-
-    # Create layout for the graph with annotations for arrows
-    layout = go.Layout(
-        showlegend=True,
-        hovermode='closest',
-        margin=dict(b=0, l=0, r=0, t=0),
-        xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
-        yaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
-        annotations=annotations  # Adding arrows to layout
-    )
-
-    # Combine edge and node traces
-    fig = go.Figure(data=edge_traces + [node_trace], layout=layout)
-    return fig
-
 # ANALYSIS ---------------------------------------------------------------------------------------------------------
 
 def check_in_weights(G):
@@ -241,7 +168,8 @@ def check_in_weights(G):
 def check_out_weights(G):
     out_weights = {}
     for node in G.nodes():
-        total_out_weight = round(sum(data['weight'] for u, v, data in G.out_edges(node, data=True)), 2)
+        total_out_weight = round(sum(data['weight'] for u, v, data in G.out_edges(node, data=True) if u != v  # Exclude self-loops
+        ),2)
         out_weights[node] = total_out_weight
         print(f"Node {node} Total Out-weight: {total_out_weight}")
     return out_weights

@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 from libpysal.weights import Queen
 from esda.moran import Moran, Moran_Local
 from libpysal.weights import lag_spatial
+from splot.esda import moran_scatterplot, plot_moran
 
 '''
 I am calculating Moran's I for mean household rent data (and possibly more types of data, 
@@ -63,8 +64,10 @@ plt.xlabel('Cardinality')
 plt.ylabel('Frequency')
 plt.title('Histogram of Cardinalities')
 
-# if cfg.SAVE_FIGURES: # FIXME: This was not being saved correctly
-    # plt.savefig(cfg.FIGURES_PATH / 'queen_cardinalities_histogram.png', dpi=300, bbox_inches='tight')
+if cfg.SAVE_FIGURES: # FIXME: This was not being saved correctly
+    plt.savefig(cfg.FIGURES_PATH / 'queen_cardinalities_histogram.png', dpi=300, bbox_inches='tight')
+
+plt.show()
 
 # visual weights figure
 f, ax = plt.subplots(1, figsize=(8, 8))
@@ -85,6 +88,8 @@ ax.set_axis_off()
 
 if cfg.SAVE_FIGURES:
     plt.savefig(cfg.FIGURES_PATH / 'queen_contiguity_weights.png', dpi=300, bbox_inches='tight')
+
+plt.show()
 
 logger.info(f'Contiguity weights saved!')
 
@@ -112,6 +117,7 @@ global_moran = global_moran.round(3) # rounding to 2 decimal points
 if cfg.SAVE_FIGURES:
     global_moran.to_csv(cfg.OUTPUTS_PATH / 'global_morans_i_df.csv', index=True)
 
+
 # CALCULATE LOCAL MORAN'S I STATS FOR EACH VARIABLE OF INTEREST ---------------------------------------------------------------------------------------------
 
 local_mi = [
@@ -131,6 +137,7 @@ local_moran = local_moran.round(3) # rounding to 2 decimal points
 
 if cfg.SAVE_FIGURES:
     local_moran.to_csv(cfg.OUTPUTS_PATH / 'local_morans_i_df.csv', index=True)
+
 
 logger.info(f'Local Morans I statistics for {cfg.INCOME_VARS_OF_INTEREST} saved as a dataframe!')
 
@@ -183,6 +190,8 @@ for var in cfg.INCOME_VARS_OF_INTEREST:
     if cfg.SAVE_FIGURES:
         plt.savefig(cfg.FIGURES_PATH / f'local_moran_map_{var.replace(" ", "_").lower()}.png', dpi=300, bbox_inches='tight')
     
+    plt.show()
+    
     # Remove the LISA column to avoid conflicts in the next iteration
     gdf.drop(columns=[f'lisa_{var.replace(" ", "_").lower()}'], inplace=True)
 
@@ -223,6 +232,8 @@ for var in cfg.INCOME_VARS_OF_INTEREST:
     if cfg.SAVE_FIGURES:
         plt.savefig(cfg.FIGURES_PATH / f'labeled_moran_plot_{var.replace(" ", "_").lower()}.png', dpi=300, bbox_inches='tight')
 
+    plt.show()
+
 for var in cfg.INCOME_VARS_OF_INTEREST:
     f, ax = plt.subplots(1, figsize=(6, 6))
     sns.regplot(
@@ -240,5 +251,48 @@ for var in cfg.INCOME_VARS_OF_INTEREST:
     if cfg.SAVE_FIGURES:
         plt.savefig(cfg.FIGURES_PATH / f'moran_plot_{var.replace(" ", "_").lower()}.png', dpi=300, bbox_inches='tight')
 
+    plt.show()
+
 logger.info(f'Morans Plot for {cfg.INCOME_VARS_OF_INTEREST} saved!')
+
+# BUILD EXTRA MORAN'S PLOT ---------------------------------------------------------------------------------------------
+
+for var, mi in zip(cfg.INCOME_VARS_OF_INTEREST, global_mi):
+    # Create a new plot for each Moran's I
+    f, ax = plt.subplots(1, figsize=(6, 6))
+    
+    # Plot the Moran's I scatterplot
+    moran_scatterplot(
+        mi,  # Pass the current Moran's I
+        aspect_equal=True,
+        ax=ax  # Pass the current axis
+    )
+
+    ax.set_xlabel(f"Attribute: {var}", fontsize=12)
+    
+    # Save the figure if required
+    if cfg.SAVE_FIGURES:
+        save_path = cfg.FIGURES_PATH / f'final_moran_plot_{var.replace(" ", "_").lower()}.png'
+        plt.savefig(save_path, dpi=300, bbox_inches='tight')
+        logger.info(f'Moran\'s Plot for {var} saved at {save_path}')
+    
+    # Show the plot if needed (optional)
+    plt.show()
+
+for var, mi in zip(cfg.INCOME_VARS_OF_INTEREST, global_mi):
+    f, ax = plt.subplots(1, figsize=(6, 6))
+
+    plot_moran(
+        mi,
+        zstandard=True)
+        # Save the figure if required
+
+    if cfg.SAVE_FIGURES:
+        save_path = cfg.FIGURES_PATH / f'moran_distrib_{var.replace(" ", "_").lower()}.png'
+        plt.savefig(save_path, dpi=300, bbox_inches='tight')
+        logger.info(f'Moran\'s Distrib for {var} saved at {save_path}')
+
+    plt.show()
+
+
 logger.info('Done!')
