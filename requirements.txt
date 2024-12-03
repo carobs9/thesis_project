@@ -15,7 +15,6 @@ mapclassify
 # unknown
 nbformat>=4.2.0
 #for graphs
-dash
-dash_cytoscape
 pyproj
 Fiona
+netwulf

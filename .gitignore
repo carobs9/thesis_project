@@ -20,8 +20,8 @@
 *.ipynb_checkpoints
 *cache
 *.graphml
+*/lib
 # Ignore the virtual environment directories
 .venv/
 .thesis_env/
-
 

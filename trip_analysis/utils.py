@@ -29,6 +29,15 @@ def get_district_names(trip_counts):
 
     return trip_counts
 
+def normalize_by_pop(trip_counts, population_df):
+    trip_counts = trip_counts.merge(population_df, left_on='origen', right_on='ID', how='left')
+    # Normalize trip counts by population of the origin district
+    trip_counts['normalized_trip_count'] = trip_counts['trip_count'] / trip_counts['Population']
+    trip_counts.drop(columns=['ID','Population'], inplace=True)  # removing extra columns
+    return trip_counts
+
+
+
 def get_income_data(trip_counts, income, income_var_1, income_var_2):
     # get origin incomes
     trip_counts = trip_counts.merge(
