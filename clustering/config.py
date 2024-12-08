@@ -3,7 +3,7 @@ from pathlib import Path
 # Set the root path
 # ROOT_PATH = Path('C:/Users/rqg886/Desktop/THESIS_PROJECT')
 ROOT_PATH = Path('/Users/caro/Desktop/thesis_project')
-FOLDER_PATH = 'mobility_data'
+FOLDER_PATH = 'clustering'
 
 # general folders
 METRO_DATA = ROOT_PATH / 'metro_data' 
@@ -20,3 +20,6 @@ OUTPUTS_PATH = ROOT_PATH / FOLDER_PATH / 'outputs'
 FIGURES_PATH = ROOT_PATH / FOLDER_PATH / 'figures'
 
 DATASETS_PATH = ROOT_PATH / 'datasets'
+
+# Set time of study
+type_of_study = 'two_weeks' # 'week', 'weekend', 'month' or 'morans', or 'two_weeks'

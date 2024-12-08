@@ -31,6 +31,8 @@ if cfg.type_of_study == 'month':
     time_of_study = 'March 2022'
 elif cfg.type_of_study == 'week':
     time_of_study = 'Normal Week'
+elif cfg.type_of_study == 'two_weeks':
+    time_of_study = 'Two Weeks'
 else:
     print('No correct time of study has been set. Maybe you meant week or weekend?')
 
@@ -103,9 +105,11 @@ rent_data = gpd.read_file(cfg.INCOME_DATA / 'geometries_and_income.geojson') # r
 rent_data = rent_data[['ID', 'geometry'] + cfg.INCOME_VARS_OF_INTEREST ] # here I select the variables of interest
 
 if cfg.type_of_study == 'month':
-    file_name = 'viajes_month_0322.csv'
+    file_name = 'all_viajes_month_0322.csv'
 elif cfg.type_of_study == 'week':
     file_name = 'viajes_week_0322.csv'  #TODO: CORRECT IF NEEDED
+elif cfg.type_of_study == 'two_weeks':
+    file_name = 'viajes_two_weeks_0322.csv'  #TODO: CORRECT IF NEEDED
 else:
     file_name = 'default_file.csv'  # FIXME: Fallback option if neither is True
 
