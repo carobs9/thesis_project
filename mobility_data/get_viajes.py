@@ -44,10 +44,9 @@ print('Shape of data: ', all_viajes.shape)
 
 logger.info(f'Shape of all viajes: {all_viajes.shape}')
 
-
 if cfg.SAVE_DFS:
-    all_viajes.to_csv(cfg.VIAJES_DATA / 'all_viajes_month_0322.csv', index=False) # saving all trips for week / weekend of interest
-    logger.info(f'Figures saved to: viajes/all_viajes_month_0322.csv')
+    all_viajes.to_csv(cfg.VIAJES_DATA / 'viajes_week_0322.csv', index=False) # saving all trips for week / weekend of interest
+    logger.info(f'Figures saved to: viajes/all_viajes_week_0322.csv')
 
 #NOTE: The residence of the users in the MITMA data is not by district, but by province. 
 # This could be a problem as I am trying to understand how people from different districts move. 
@@ -56,7 +55,6 @@ if cfg.SAVE_DFS:
 # The problem is that the mobility would be very limited to those trips either coming from or going home.
 
 filtered_df = all_viajes.loc[(all_viajes['actividad_origen'] == 'casa')]
-
 print('Shape of the data of study (filtering origin=home): ', filtered_df.shape)
 
 logger.info('Done!')

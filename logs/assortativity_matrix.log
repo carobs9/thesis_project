@@ -497,3 +497,65 @@
 2024-12-08 11:03:48,152 - my_logger - INFO - Stratifying mobility data by rent...
 2024-12-08 11:03:48,152 - my_logger - DEBUG - Put more thought into this, and review
 2024-12-08 11:04:09,560 - my_logger - INFO - All assortativity matrices figures for Median income per consumption unit saved successfully!
+2024-12-08 14:54:56,453 - my_logger - INFO - I calculate 10 income deciles for different income data in the city of Madrid
+2024-12-08 14:54:56,454 - my_logger - INFO - Timeframe: March 2022
+2024-12-08 14:54:56,454 - my_logger - INFO - I build assortativity matrices for the Median income per consumption unit
+2024-12-08 14:54:56,454 - my_logger - INFO - The variables for which income deciles are calculared are: ['Gini Index', 'Average income per consumption unit', 'Median income per consumption unit', 'Average gross income per household', 'Average gross income per person', 'Average net income per household', 'Average net income per person']
+2024-12-08 14:54:56,454 - my_logger - INFO - Save figures = True
+2024-12-08 14:54:56,454 - my_logger - INFO - Figures path: /Users/caro/Desktop/thesis_project/segregation_indices/figures/month
+2024-12-08 14:54:56,454 - my_logger - INFO - Opening data...
+2024-12-08 14:55:19,488 - my_logger - INFO - Dataframes used: /Users/caro/Desktop/thesis_project/segregation_indices/data/processed/geometries_and_income.geojson and /Users/caro/Desktop/thesis_project/mobility_data/VIAJES/all_viajes_month_0322.csv
+2024-12-08 14:55:19,489 - my_logger - INFO - Shape of the rent dataset: (21, 9)
+2024-12-08 14:55:19,490 - my_logger - INFO - Shape of the mobility dataset: (4839108, 15)
+2024-12-08 14:55:19,490 - my_logger - INFO - 1. Merging mobility and income data
+2024-12-08 14:55:20,019 - my_logger - INFO - Variable to calculate matrices on is set to: Median income per consumption unit
+2024-12-08 14:55:20,019 - my_logger - INFO - 2. Calculating 10 income deciles for the Median income per consumption unit data.
+2024-12-08 14:55:21,668 - my_logger - INFO - Plotting income deciles
+2024-12-08 14:55:22,552 - my_logger - INFO - Plot saved at: /Users/caro/Desktop/thesis_project/segregation_indices/figures/month/median income per consumption unit_deciles_distribution_destination.png
+2024-12-08 14:55:22,552 - my_logger - INFO - Income deciles for ['Gini Index', 'Average income per consumption unit', 'Median income per consumption unit', 'Average gross income per household', 'Average gross income per person', 'Average net income per household', 'Average net income per person'] saved!
+2024-12-08 14:55:22,552 - my_logger - INFO - Building assortativity matrices...
+2024-12-08 14:55:22,740 - my_logger - DEBUG - Encountered an error with pivot(): Index contains duplicate entries, cannot reshape
+2024-12-08 14:55:22,740 - my_logger - DEBUG - Switching to pivot_table() to handle duplicates.
+2024-12-08 14:55:22,742 - my_logger - INFO - Assortativity matrix created successfully!
+2024-12-08 14:55:22,742 - my_logger - INFO - Assortativity matrix normalized successfully!
+2024-12-08 14:55:22,744 - my_logger - INFO - Stratifying mobility data by rent...
+2024-12-08 14:55:22,744 - my_logger - DEBUG - Put more thought into this, and review
+2024-12-08 14:55:37,765 - my_logger - INFO - All assortativity matrices figures for Median income per consumption unit saved successfully!
+2024-12-08 14:58:02,532 - my_logger - INFO - I calculate 10 income deciles for different income data in the city of Madrid
+2024-12-08 14:58:02,533 - my_logger - INFO - Timeframe: Normal Week
+2024-12-08 14:58:02,533 - my_logger - INFO - I build assortativity matrices for the Median income per consumption unit
+2024-12-08 14:58:02,533 - my_logger - INFO - The variables for which income deciles are calculared are: ['Gini Index', 'Average income per consumption unit', 'Median income per consumption unit', 'Average gross income per household', 'Average gross income per person', 'Average net income per household', 'Average net income per person']
+2024-12-08 14:58:02,533 - my_logger - INFO - Save figures = True
+2024-12-08 14:58:02,533 - my_logger - INFO - Figures path: /Users/caro/Desktop/thesis_project/segregation_indices/figures/week
+2024-12-08 14:58:02,533 - my_logger - INFO - Opening data...
+2024-12-08 14:58:06,973 - my_logger - INFO - Dataframes used: /Users/caro/Desktop/thesis_project/segregation_indices/data/processed/geometries_and_income.geojson and /Users/caro/Desktop/thesis_project/mobility_data/VIAJES/viajes_week_0322.csv
+2024-12-08 14:58:06,973 - my_logger - INFO - Shape of the rent dataset: (21, 9)
+2024-12-08 14:58:06,973 - my_logger - INFO - Shape of the mobility dataset: (1260778, 15)
+2024-12-08 14:58:06,973 - my_logger - INFO - 1. Merging mobility and income data
+2024-12-08 14:58:07,107 - my_logger - INFO - Variable to calculate matrices on is set to: Median income per consumption unit
+2024-12-08 14:58:07,107 - my_logger - INFO - 2. Calculating 10 income deciles for the Median income per consumption unit data.
+2024-12-08 14:58:07,450 - my_logger - INFO - Plotting income deciles
+2024-12-08 14:59:36,510 - my_logger - INFO - I calculate 10 income deciles for different income data in the city of Madrid
+2024-12-08 14:59:36,511 - my_logger - INFO - Timeframe: Normal Week
+2024-12-08 14:59:36,511 - my_logger - INFO - I build assortativity matrices for the Median income per consumption unit
+2024-12-08 14:59:36,511 - my_logger - INFO - The variables for which income deciles are calculared are: ['Gini Index', 'Average income per consumption unit', 'Median income per consumption unit', 'Average gross income per household', 'Average gross income per person', 'Average net income per household', 'Average net income per person']
+2024-12-08 14:59:36,511 - my_logger - INFO - Save figures = True
+2024-12-08 14:59:36,511 - my_logger - INFO - Figures path: /Users/caro/Desktop/thesis_project/segregation_indices/figures/week
+2024-12-08 14:59:36,511 - my_logger - INFO - Opening data...
+2024-12-08 14:59:40,657 - my_logger - INFO - Dataframes used: /Users/caro/Desktop/thesis_project/segregation_indices/data/processed/geometries_and_income.geojson and /Users/caro/Desktop/thesis_project/mobility_data/VIAJES/viajes_week_0322.csv
+2024-12-08 14:59:40,657 - my_logger - INFO - Shape of the rent dataset: (21, 9)
+2024-12-08 14:59:40,657 - my_logger - INFO - Shape of the mobility dataset: (1260778, 15)
+2024-12-08 14:59:40,657 - my_logger - INFO - 1. Merging mobility and income data
+2024-12-08 14:59:40,785 - my_logger - INFO - Variable to calculate matrices on is set to: Median income per consumption unit
+2024-12-08 14:59:40,786 - my_logger - INFO - 2. Calculating 10 income deciles for the Median income per consumption unit data.
+2024-12-08 14:59:41,117 - my_logger - INFO - Plotting income deciles
+2024-12-08 14:59:41,412 - my_logger - INFO - Plot saved at: /Users/caro/Desktop/thesis_project/segregation_indices/figures/week/median income per consumption unit_deciles_distribution_destination.png
+2024-12-08 14:59:41,412 - my_logger - INFO - Income deciles for ['Gini Index', 'Average income per consumption unit', 'Median income per consumption unit', 'Average gross income per household', 'Average gross income per person', 'Average net income per household', 'Average net income per person'] saved!
+2024-12-08 14:59:41,413 - my_logger - INFO - Building assortativity matrices...
+2024-12-08 14:59:41,465 - my_logger - DEBUG - Encountered an error with pivot(): Index contains duplicate entries, cannot reshape
+2024-12-08 14:59:41,465 - my_logger - DEBUG - Switching to pivot_table() to handle duplicates.
+2024-12-08 14:59:41,466 - my_logger - INFO - Assortativity matrix created successfully!
+2024-12-08 14:59:41,467 - my_logger - INFO - Assortativity matrix normalized successfully!
+2024-12-08 14:59:41,468 - my_logger - INFO - Stratifying mobility data by rent...
+2024-12-08 14:59:41,468 - my_logger - DEBUG - Put more thought into this, and review
+2024-12-08 15:00:02,698 - my_logger - INFO - All assortativity matrices figures for Median income per consumption unit saved successfully!

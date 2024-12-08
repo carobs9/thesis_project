@@ -103,13 +103,13 @@ rent_data = gpd.read_file(cfg.INCOME_DATA / 'geometries_and_income.geojson') # r
 rent_data = rent_data[['ID', 'geometry'] + cfg.INCOME_VARS_OF_INTEREST ] # here I select the variables of interest
 
 if cfg.type_of_study == 'month':
-    file_name = 'all_viajes_month_0322.csv'
+    file_name = 'viajes_month_0322.csv'
 elif cfg.type_of_study == 'week':
-    file_name = 'all_viajes_week_0222.csv'
+    file_name = 'viajes_week_0322.csv'  #TODO: CORRECT IF NEEDED
 else:
     file_name = 'default_file.csv'  # FIXME: Fallback option if neither is True
 
-mobility = pd.read_csv(cfg.MOBILITY_DATA / f'VIAJES/{file_name}') # week of interest
+mobility = pd.read_csv(cfg.MOBILITY_DATA / f'VIAJES/{file_name}', thousands='.', decimal=',') #df of interest
 mobility = mobility.loc[(mobility['actividad_origen'] == 'casa')] # filtering only trips from home!
 
 logger.info(f"Dataframes used: {cfg.INCOME_DATA / 'geometries_and_income.geojson'} and {cfg.MOBILITY_DATA / f'VIAJES/{file_name}'}")

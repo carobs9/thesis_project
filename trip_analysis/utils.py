@@ -17,16 +17,26 @@ id_to_name = district_mapping.set_index('ID')['name_2'].to_dict()
     # trip_counts = df.groupby(grouping_columns).size().reset_index(name='trip_count')
     # return trip_counts
 
-def build_trip_count(df, sociodemographic_var=None): # FIXED
+def build_trip_count(df): # FIXED
     # Determine the grouping columns based on whether sociodemographic_var is provided
     grouping_columns = ['origen', 'destino']
-    if sociodemographic_var:
-        grouping_columns.append(sociodemographic_var)
-    
+
     # Group by the determined columns and sum the 'viajes' column
     trip_counts = df.groupby(grouping_columns)['viajes'].sum().reset_index(name='trip_count')
     return trip_counts
 
+def build_distance_count(df): # FIXED, AND NEW
+    '''I am obtaining the km per trip! REVIEW'''
+    # Group by 'origen' and 'destino' and calculate the sum of 'viajes_km' and 'viajes'
+    trip_counts = df.groupby(['origen', 'destino']).agg({
+        'viajes_km': 'sum',
+        'viajes': 'sum'
+    }).reset_index()
+    
+    # Calculate the ratio and add it as a new column
+    trip_counts['distance_per_trip'] = trip_counts['viajes_km'] / trip_counts['viajes']
+    
+    return trip_counts
 
 def get_district_names(trip_counts):
     # get names of districts

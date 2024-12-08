@@ -14,3 +14,9 @@
 2024-10-01 16:13:12,223 - my_logger - INFO - Shape of all viajes: (19900955, 15)
 2024-10-01 16:14:08,100 - my_logger - INFO - Figures saved to: viajes/all_viajes_month_0322.csv
 2024-10-01 16:14:09,368 - my_logger - INFO - Done!
+2024-12-08 14:47:26,273 - my_logger - INFO - Extracting trips from basicos_distritos_viajes_202203
+2024-12-08 14:47:26,274 - my_logger - INFO - Timeframe of study: month
+2024-12-08 14:47:26,274 - my_logger - INFO - Days of interest: [0, 1, 2, 3, 4, 5, 6, 7]
+2024-12-08 14:47:26,678 - my_logger - INFO - Shape of all viajes: (5202336, 15)
+2024-12-08 14:47:40,203 - my_logger - INFO - Figures saved to: viajes/all_viajes_week_0322.csv
+2024-12-08 14:47:40,444 - my_logger - INFO - Done!

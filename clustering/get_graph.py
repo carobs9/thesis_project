@@ -4,7 +4,7 @@ import seaborn as sns
 import numpy as np
 import pickle
 
-all_viajes = pd.read_csv('/Users/caro/Desktop/thesis_project/mobility_data/VIAJES/all_viajes_month_0322.csv')
+all_viajes = pd.read_csv('/Users/caro/Desktop/thesis_project/mobility_data/VIAJES/viajes_week_0322.csv',thousands='.',decimal=',')
 income = gpd.read_file('/Users/caro/Desktop/thesis_project/segregation_indices/data/processed/geometries_and_income.geojson')
 gdf = gpd.read_file(cfg.ZONIFICACION_DATA / 'distritos/madrid_gdf.geojson')  
 gdf = gdf.to_crs(epsg=4326) 

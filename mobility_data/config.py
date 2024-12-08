@@ -24,8 +24,9 @@ DATASETS_PATH = ROOT_PATH / 'datasets'
 # NOTE: These variables need to be set by the user
 # 1. Date of interest (week/weekend, specific days)
 
-type_of_study = 'week' # 'week', 'month', or 'morans'
-MONTH_DAYS =  [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30] # days of the month to study (monthly study)
+type_of_study = 'month' # 'week', 'month', or 'morans'
+# MONTH_DAYS =  [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30] # days of the month to study (monthly study)
+MONTH_DAYS =  [0,1,2,3,4,5,6,7] # days of the month to study (weekly study, FIX)
 WEEK_DAYS =  [4,5] # days of the month to study (normal week)
 
 # 2. Dataframe of interest
