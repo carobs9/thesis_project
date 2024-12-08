@@ -22,7 +22,7 @@ def get_positions(gdf):
     }
 
 # Define graph based on OD trips including normalisation by population 
-def define_graph(df, population_df=None, NORMALISE_BY_POP=False, remove_weak_edges=False, threshold=0.1):
+def define_graph(trip_counts, remove_weak_edges=False, threshold=0.1, standardise=False):
     """
     Define a directed graph from a DataFrame with trip counts and optional population normalization.
 
@@ -38,25 +38,12 @@ def define_graph(df, population_df=None, NORMALISE_BY_POP=False, remove_weak_edg
     - trip_counts: DataFrame with trip count and normalized trip count.
     """
     G = nx.DiGraph()
-
-    # Group by origin and destination, and aggregate trip counts
-    trip_counts = df.groupby(['origen', 'destino']).size().reset_index(name='trip_count')
-
-    # Normalize by population if the flag is set
-    if NORMALISE_BY_POP and population_df is not None:
-        # Merge population data into the trip_counts DataFrame
-        trip_counts = trip_counts.merge(population_df, left_on='origen', right_on='ID', how='left')
-        # Normalize trip counts by population of the origin district
-        trip_counts['normalized_trip_count'] = trip_counts['trip_count'] / trip_counts['Population']
-        trip_counts.drop(columns=['ID'], inplace=True)  # removing extra columns
-        normalization_column = 'normalized_trip_count'
-    else:
-        normalization_column = 'trip_count'
-
+    
     # Normalize trip counts between 0 and 1
-    trip_counts['normalized_trip_count'] = (
-        (trip_counts[normalization_column] - trip_counts[normalization_column].min()) /
-        (trip_counts[normalization_column].max() - trip_counts[normalization_column].min()))
+    if standardise:
+        trip_counts['normalized_trip_count'] = (
+            (trip_counts['normalized_trip_count'] - trip_counts['normalized_trip_count'].min()) /
+            (trip_counts['normalized_trip_count'].max() - trip_counts['normalized_trip_count'].min()))
 
     # Option to remove weak edges below a threshold
     if remove_weak_edges:
@@ -70,8 +57,7 @@ def define_graph(df, population_df=None, NORMALISE_BY_POP=False, remove_weak_edg
             weight=row['normalized_trip_count']
         )
     
-    return G, trip_counts
-
+    return G
 
 
 # PLOTTING ---------------------------------------------------------------------------------------------------------

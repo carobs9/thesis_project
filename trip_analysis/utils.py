@@ -7,15 +7,26 @@ id_to_name = district_mapping.set_index('ID')['name_2'].to_dict()
 
 # TRIP ANALYSIS --------------------------------------------------------------------------------------------------- 
 
-def build_trip_count(df, sociodemographic_var=None):
+# def build_trip_count(df, sociodemographic_var=None): # OLD
+    # Determine the grouping columns based on whether sociodemographic_var is provided
+    # grouping_columns = ['origen', 'destino']
+    # if sociodemographic_var:
+        # grouping_columns.append(sociodemographic_var)
+    
+    # Group by the determined columns and calculate the trip count
+    # trip_counts = df.groupby(grouping_columns).size().reset_index(name='trip_count')
+    # return trip_counts
+
+def build_trip_count(df, sociodemographic_var=None): # FIXED
     # Determine the grouping columns based on whether sociodemographic_var is provided
     grouping_columns = ['origen', 'destino']
     if sociodemographic_var:
         grouping_columns.append(sociodemographic_var)
     
-    # Group by the determined columns and calculate the trip count
-    trip_counts = df.groupby(grouping_columns).size().reset_index(name='trip_count')
+    # Group by the determined columns and sum the 'viajes' column
+    trip_counts = df.groupby(grouping_columns)['viajes'].sum().reset_index(name='trip_count')
     return trip_counts
+
 
 def get_district_names(trip_counts):
     # get names of districts
