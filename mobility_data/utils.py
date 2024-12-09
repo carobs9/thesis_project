@@ -30,7 +30,7 @@ def open_gz(data_dir, days):
     for day in days: # Iterate over the list of days
         file_to_open = all_files_sorted[day] # Select the file for the given day (day should be zero-based index)
         file_path = os.path.join(data_dir, file_to_open)  # Create the full path to the file
-        df = pd.read_csv(file_path, compression='gzip', sep='|') # Read the compressed CSV file
+        df = pd.read_csv(file_path, compression='gzip', sep='|',decimal='.') # Read the compressed CSV file
         dfs.append(df) # Append the DataFrame to the list
     
     return dfs
@@ -61,7 +61,7 @@ def open_gz_by_district(data_dir, days, district_code=None):
         file_path = os.path.join(data_dir, file_to_open)  # Create the full path to the file
 
         # Read the entire file into a DataFrame
-        df = pd.read_csv(file_path, compression='gzip', sep='|')
+        df = pd.read_csv(file_path, compression='gzip', sep='|', decimal='.')
 
         # Convert 'origen' and 'destino' columns to strings, filling NaN values with empty strings
         df['origen'] = df['origen'].astype(str).fillna('')
