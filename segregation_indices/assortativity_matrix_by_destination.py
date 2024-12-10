@@ -24,7 +24,7 @@ logger.addHandler(file_handler)
 # SET VARIABLES -----------------------------------------------------------------
 
 # FIXME: Make more efficient, and fix variable names to plot nicely
-var_of_interest = 'Gini Index' 
+var_of_interest = 'Median income per consumption unit' 
 n_income_deciles = 10
 
 if cfg.type_of_study == 'month':
@@ -163,7 +163,7 @@ viajes_with_income.drop(columns=['residencia', 'estudio_origen_posible', 'estudi
 # PLOT INCOME DECILES -----------------------------------------------------------------------------------------------
 
 logger.info('Plotting income deciles')
-bin_counts = viajes_with_income['income_decile'].value_counts().sort_index()
+bin_counts = viajes_with_income.groupby('income_decile')['viajes'].sum()
 bin_counts.plot(kind='bar')
 
 # 1. matplotlib. FIXME: IS this plot correct? I have to make sure it makes sense.
@@ -183,7 +183,8 @@ logger.info(f'Income deciles for {cfg.INCOME_VARS_OF_INTEREST} saved!')
 logger.info('Building assortativity matrices...')
 
 # Group by origin and destination deciles and count the trips. FIXME: Change here to focus on purpose of the trip instead of renta
-trip_counts_by_decile = viajes_with_income.groupby(['renta', 'income_decile', 'income_decile_dest']).size().reset_index(name='trip_count')
+# trip_counts_by_decile = viajes_with_income.groupby(['renta', 'income_decile', 'income_decile_dest']).size().reset_index(name='trip_count') # OLD
+trip_counts_by_decile = viajes_with_income.groupby(['renta', 'income_decile', 'income_decile_dest'])['viajes'].sum().reset_index(name='trip_count')
 districts = rent_data['ID'].unique()
 
 try:
