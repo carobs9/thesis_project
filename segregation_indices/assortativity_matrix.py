@@ -33,6 +33,8 @@ elif cfg.type_of_study == 'week':
     time_of_study = 'Normal Week'
 elif cfg.type_of_study == 'two_weeks':
     time_of_study = 'Two Weeks'
+elif cfg.type_of_study == 'weekend':
+    time_of_study = 'Weekend'
 else:
     print('No correct time of study has been set. Maybe you meant week or weekend?')
 
@@ -110,6 +112,8 @@ elif cfg.type_of_study == 'week':
     file_name = 'viajes_week_0322.csv'  #TODO: CORRECT IF NEEDED
 elif cfg.type_of_study == 'two_weeks':
     file_name = 'viajes_two_weeks_0322.csv'  #TODO: CORRECT IF NEEDED
+elif cfg.type_of_study == 'weekend':
+    file_name = 'viajes_weekend_0322.csv'
 else:
     file_name = 'default_file.csv'  # FIXME: Fallback option if neither is True
 

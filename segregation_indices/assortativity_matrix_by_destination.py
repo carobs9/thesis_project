@@ -31,6 +31,10 @@ if cfg.type_of_study == 'month':
     time_of_study = 'March 2022'
 elif cfg.type_of_study == 'week':
     time_of_study = 'Normal Week'
+elif cfg.type_of_study == 'two_weeks':
+    time_of_study = 'Two Weeks'
+elif cfg.type_of_study == 'weekend':
+    time_of_study = 'Weekend'
 else:
     print('No correct time of study has been set. Maybe you meant week or weekend?')
 
@@ -105,11 +109,15 @@ rent_data = rent_data[['ID', 'geometry'] + cfg.INCOME_VARS_OF_INTEREST ] # here 
 if cfg.type_of_study == 'month':
     file_name = 'all_viajes_month_0322.csv'
 elif cfg.type_of_study == 'week':
-    file_name = 'all_viajes_week_0222.csv'
+    file_name = 'viajes_week_0322.csv'  #TODO: CORRECT IF NEEDED
+elif cfg.type_of_study == 'two_weeks':
+    file_name = 'viajes_two_weeks_0322.csv'  #TODO: CORRECT IF NEEDED
+elif cfg.type_of_study == 'weekend':
+    file_name = 'viajes_weekend_0322.csv'
 else:
     file_name = 'default_file.csv'  # FIXME: Fallback option if neither is True
 
-mobility = pd.read_csv(cfg.MOBILITY_DATA / f'VIAJES/{file_name}') # week of interest
+mobility = pd.read_csv(cfg.MOBILITY_DATA / f'VIAJES/{file_name}', thousands='.', decimal=',') # week of interest
 # mobility = mobility.loc[(mobility['actividad_origen'] == 'casa')] # filtering only trips from home!
 mobility = mobility.loc[(mobility['actividad_origen'] == 'casa') & (mobility['actividad_destino'] == 'trabajo_estudio')]
 print(mobility.shape)

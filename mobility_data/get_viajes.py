@@ -29,6 +29,8 @@ elif cfg.type_of_study == 'week':
     viajes = open_gz_by_district(cfg.VIAJES_DATA / cfg.DF_OF_INTEREST, cfg.WEEK_DAYS, district_code='28079') # substracting trips in Madrid districts during day 5 to 6 of Feb 
 elif cfg.type_of_study == 'two_weeks':
     viajes = open_gz_by_district(cfg.VIAJES_DATA / cfg.DF_OF_INTEREST, cfg.TWO_WEEK_DAYS, district_code='28079') # substracting trips in Madrid districts during day 5 to 6 of Feb 
+elif cfg.type_of_study == 'weekend':
+    viajes = open_gz_by_district(cfg.VIAJES_DATA / cfg.DF_OF_INTEREST, cfg.WEEKEND_DAYS, district_code='28079') # substracting trips in Madrid districts during day 5 to 6 of Feb
 else:
     print('No time of study has been set')
 
@@ -41,6 +43,8 @@ elif cfg.type_of_study == 'week':
     logger.info(f'Days of interest: {cfg.WEEK_DAYS}')
 elif cfg.type_of_study == 'two_weeks':
     logger.info(f'Days of interest: {cfg.TWO_WEEK_DAYS}')
+elif cfg.type_of_study == 'weekend':
+    logger.info(f'Days of interest: {cfg.WEEKEND_DAYS}')
 
 
 all_viajes = pd.concat(viajes, ignore_index=True)

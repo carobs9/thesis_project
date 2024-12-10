@@ -66,3 +66,21 @@
 2024-12-09 22:00:48,837 - my_logger - INFO - Shape of all viajes: (1361784, 15)
 2024-12-09 22:00:52,916 - my_logger - INFO - Figures saved to:/Users/caro/Desktop/thesis_project/mobility_data/VIAJES / viajes_week_0322.csv
 2024-12-09 22:00:52,977 - my_logger - INFO - Done!
+2024-12-10 00:14:40,436 - my_logger - INFO - Extracting trips from basicos_distritos_viajes_202203
+2024-12-10 00:14:40,438 - my_logger - INFO - Timeframe of study: weekend
+2024-12-10 00:14:40,438 - my_logger - INFO - Days of interest: [7, 8]
+2024-12-10 00:14:40,525 - my_logger - INFO - Shape of all viajes: (1367795, 15)
+2024-12-10 00:14:44,143 - my_logger - INFO - Figures saved to:/Users/caro/Desktop/thesis_project/mobility_data/VIAJES / viajes_weekend_0322.csv
+2024-12-10 00:14:44,208 - my_logger - INFO - Done!
+2024-12-10 00:26:18,618 - my_logger - INFO - Extracting trips from basicos_distritos_viajes_202203
+2024-12-10 00:26:18,619 - my_logger - INFO - Timeframe of study: two_weeks
+2024-12-10 00:26:18,619 - my_logger - INFO - Days of interest: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+2024-12-10 00:26:19,335 - my_logger - INFO - Shape of all viajes: (8972891, 15)
+2024-12-10 00:26:41,997 - my_logger - INFO - Figures saved to:/Users/caro/Desktop/thesis_project/mobility_data/VIAJES / viajes_two_weeks_0322.csv
+2024-12-10 00:26:42,414 - my_logger - INFO - Done!
+2024-12-10 01:33:44,886 - my_logger - INFO - Extracting trips from basicos_distritos_viajes_202203
+2024-12-10 01:33:44,888 - my_logger - INFO - Timeframe of study: weekend
+2024-12-10 01:33:44,889 - my_logger - INFO - Days of interest: [24, 25, 26, 27, 28, 29, 30]
+2024-12-10 01:33:45,226 - my_logger - INFO - Shape of all viajes: (4534815, 15)
+2024-12-10 01:33:56,711 - my_logger - INFO - Figures saved to:/Users/caro/Desktop/thesis_project/mobility_data/VIAJES / viajes_weekend_0322.csv
+2024-12-10 01:33:56,917 - my_logger - INFO - Done!

@@ -22,4 +22,4 @@ FIGURES_PATH = ROOT_PATH / FOLDER_PATH / 'figures'
 DATASETS_PATH = ROOT_PATH / 'datasets'
 
 # Set time of study
-type_of_study = 'two_weeks' # 'week', 'weekend', 'month' or 'morans', or 'two_weeks'
+type_of_study = 'month' # 'week', 'weekend', 'month' or 'morans', or 'two_weeks'

@@ -10,6 +10,8 @@ elif cfg.type_of_study == 'week':
     file_name = 'viajes_week_0322.csv'  #TODO: CORRECT IF NEEDED
 elif cfg.type_of_study == 'two_weeks':
     file_name = 'viajes_two_weeks_0322.csv'  #TODO: CORRECT IF NEEDED
+elif cfg.type_of_study == 'weekend':
+    file_name = 'viajes_weekend_0322.csv'  #TODO: CORRECT IF NEEDED
 else:
     file_name = 'default_file.csv'  # FIXME: Fallback option if neither is True
 
